@@ -21,8 +21,8 @@ function App() {
           </Container>
         </Navbar>
 
-        <div className="section-dark" style={{ height:'80vh' }}>
-          <Container className="d-flex justify-content-center align-items-center h-100">
+        <div className="section-dark">
+          <Container className="d-flex justify-content-center align-items-center">
             <Row>
               <Col className="d-flex flex-column align-items-center">
                 <h1 className='mb-0'>Contacta'ns</h1>
@@ -33,7 +33,7 @@ function App() {
           </Container>
         </div>
 
-        <div className="section-light" style={{ height:'80vh' }}>
+        <div className="section-light">
           <Container className="d-flex justify-content-center align-items-center h-100">
             <Row>
               <Col className="d-flex flex-column align-items-center">
@@ -50,11 +50,11 @@ function App() {
           </Container>
         </div>
 
-        <div className="section-dark" style={{ height:'20vh' }}>
+        <div className="section-footer">
           <Container className="d-flex justify-content-center align-items-center h-100">
             <Row className="d-flex flex-column align-items-center text-center">
               <Col classname="w-100">
-                <h2>Segueix-nos a les nostres xarxes!</h2>
+                <h3>Segueix-nos a les nostres xarxes!</h3>
               </Col>
               <Col className="w-100 justify-content-between">
                 <Button variant="link" size="lg">
