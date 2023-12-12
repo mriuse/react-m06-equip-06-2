@@ -1,7 +1,10 @@
 import React from 'react';
+// import Login from './auth/Login';
+// import Register from './auth/Register';
 import { Container, Row, Col, Button, Navbar, Nav } from 'react-bootstrap';
 import { RiTwitterLine, RiFacebookCircleLine, RiGithubLine, RiLinkedinLine } from "react-icons/ri";
 import './App.scss'
+
 
 function App() {
   return (
