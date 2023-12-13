@@ -2,7 +2,7 @@ import React from 'react'
 
 const Login = () => {
   return (
-    <div className="d-flex flex-column align-center border border-primary border-2 border-bottom-0 p-3 rounded-top container-md">
+    <div className="border border-primary border-2 p-3 mt-5 rounded-top container-md col-lg-6 col-md-8 col-sm-10 col-12">
       <form action="login">
         <div className="mb-3">
           <label htmlFor="email" className="form-label">Email:</label>

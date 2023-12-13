@@ -2,7 +2,7 @@ import React from 'react'
 
 const Register = () => {
   return (
-    <div className="d-flex flex-column align-center border border-2 border-top-1 border-primary p-3 rounded-bottom container-md">
+    <div className="border border-2 border-top-1 border-primary p-3 rounded-bottom container-md col-lg-6 col-md-8 col-sm-10 col-12">
       <form action="register">
         <div className="mb-3">
           <label htmlFor="email" className="form-label">Email:</label>
