@@ -1,28 +1,30 @@
-import React from 'react'
+import React from 'react';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const Register = () => {
   return (
-    <div className="border border-2 border-top-1 border-primary p-3 rounded-bottom container-md col-lg-6 col-md-8 col-sm-10 col-12">
-      <form action="register">
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email:</label>
-          <input type="text" className="form-control" id="email" placeholder="example@example.com"/>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Password:</label>
-          <input type="text" className="form-control" id="password"/>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password_confirm" className="form-label">Confirm password:</label>
-          <input type="text" className="form-control" id="password_confirm"/>
-        </div>
-        <div className="mb-3">
-            <input className="btn btn-primary" type="submit" value="Register"/>
-        </div>
-      </form>
-    </div>
-
-  )
+    <Row className="border border-2 border-top-1 border-primary p-3 rounded">
+      <Col lg={6} md={8} sm={10} xs={12} className="container-md">
+        <Form action="register">
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>Email:</Form.Label>
+            <Form.Control type="email" placeholder="example@example.com"/>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="password">
+            <Form.Label>Password:</Form.Label>
+            <Form.Control type="password" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="password_confirm">
+            <Form.Label>Confirm password:</Form.Label>
+            <Form.Control type="password" />
+          </Form.Group>
+          <div className="mb-3">
+            <Button variant="primary" type="submit">Register</Button>
+          </div>
+        </Form>
+      </Col>
+    </Row>
+  );
 }
 
 export default Register;
