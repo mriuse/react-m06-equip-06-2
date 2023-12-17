@@ -5,7 +5,7 @@ const Login = ({ toggleLogin }) => {
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
 
-  let setLogin = (e) => {
+  let sendLogin = (e) => {
     e.preventDefault();
     console.log("Log in:" + name + "/" + password);
   }
@@ -36,8 +36,11 @@ const Login = ({ toggleLogin }) => {
             />
             </Form.Group>
             <div className="mb-3">
-              <Button variant="primary"
-              onClick={setLogin}
+              <Button 
+                variant="primary"
+                onClick={(e) => {
+                  sendLogin(e);
+                }}
               >Login</Button>
             </div>
           </Form>
