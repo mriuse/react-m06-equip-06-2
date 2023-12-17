@@ -4,10 +4,22 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 const Login = ({ toggleLogin }) => {
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
+  let [error, setError] = useState({});
+
+  let users = JSON.parse(localStorage.getItem("users")) || [];
 
   let sendLogin = (e) => {
     e.preventDefault();
-    console.log("Log in:" + name + "/" + password);
+    const checkUser = users.some(
+      user => user.name === name && user.password === password
+    );
+
+    if(checkUser){
+      console.log("User login: " + name)
+    }else{
+      setError({ message: "Invalid login credentials!" });
+    }
+    
   }
 
   return (
@@ -35,6 +47,11 @@ const Login = ({ toggleLogin }) => {
               }}
             />
             </Form.Group>
+            {error && error.message && (
+              <div className="mb-3">
+                <p className="text-danger">{error.message}</p>
+              </div>
+            )}
             <div className="mb-3">
               <Button 
                 variant="primary"

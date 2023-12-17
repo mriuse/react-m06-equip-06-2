@@ -3,6 +3,9 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const Register = ({ toggleLogin }) => {
   let [form, setForm] = useState({});
+  let [error, setError] = useState({});
+
+  let users = JSON.parse(localStorage.getItem("users")) || [];
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -17,9 +20,24 @@ const Register = ({ toggleLogin }) => {
     e.preventDefault();
 
     let { name, password, password_confirm, email } = form;
-    console.log(
-      "Register: " + name + "/" + email + "/" + password + "/" + password_confirm
-    );
+
+    const checkDuplicates = user_email => users.filter(
+      user => user.user_email === user_email
+    ).length > 0;
+
+    if(!checkDuplicates(email)){
+      let new_user = {
+        name : name,
+        email : email,
+        password : password
+      }
+      users.push(new_user);
+      localStorage.setItem ("users",JSON.stringify(users));
+
+      console.log("New user added: " + name)
+    }else{
+      setError({ message: "This e-mail address has already been taken!" });
+    }
   };
 
   return (
@@ -60,6 +78,11 @@ const Register = ({ toggleLogin }) => {
                 onChange={handleChange}
               />
             </Form.Group>
+            {error && error.message && (
+              <div className="mb-3">
+                <p className="text-danger">{error.message}</p>
+              </div>
+            )}
             <div className="mb-3">
               <Button 
                 variant="primary"
