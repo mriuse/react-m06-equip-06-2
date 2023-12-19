@@ -37,7 +37,7 @@ export default function App() {
       <div className="section-links">
         <Container className="d-flex justify-content-center align-items-center h-100">
           <Row className="d-flex flex-column align-items-center text-center">
-            <Col classname="w-100">
+            <Col className="w-100">
               <h3>Segueix-nos a les nostres xarxes!</h3>
             </Col>
             <Col className="w-100 justify-content-between">

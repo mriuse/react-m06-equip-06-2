@@ -9,23 +9,21 @@ import Header from './partials/Header';
 import Footer from './partials/Footer';
 
 function App() {
-  let [authToken, setAuthToken] = useState("a");
+  let [authToken, setAuthToken] = useState("");
   return (
     <>
       <div className="body-custom">
-        <div className="section-light">
-          <UserContext.Provider value={{ authToken, setAuthToken }}>
-            {authToken ? (
-              <>
-                <Header/>
-                <About/>
-                <Footer/>
-              </>
-            ) : (
-              <LoginRegister/>
-            )}
-          </UserContext.Provider>
-        </div>
+        <UserContext.Provider value={{ authToken, setAuthToken }}>
+          {authToken ? (
+            <>
+              <Header/>
+              <About/>
+              <Footer/>
+            </>
+          ) : (
+            <LoginRegister/>
+          )}
+        </UserContext.Provider>
       </div>
     </>
   )

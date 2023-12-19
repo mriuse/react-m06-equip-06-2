@@ -7,9 +7,11 @@ const LoginRegister = () => {
   let [login, toggleLogin] = useState(true);
   return (
     <>
-      <Container>
-        {login ? <Login toggleLogin={() => toggleLogin(!login)} /> : <Register toggleLogin={() => toggleLogin(!login)} />}
-      </Container>
+      <div className="section-light">
+        <Container>
+          {login ? <Login toggleLogin={() => toggleLogin(!login)} /> : <Register toggleLogin={() => toggleLogin(!login)} />}
+        </Container>
+      </div>
     </>
   );
 }

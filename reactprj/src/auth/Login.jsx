@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
+import { UserContext } from '../userContext';
 
 const Login = ({ toggleLogin }) => {
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
   let [error, setError] = useState({});
+
+  const { setAuthToken } = useContext(UserContext);
 
   let users = JSON.parse(localStorage.getItem("users")) || [];
 
@@ -15,6 +18,7 @@ const Login = ({ toggleLogin }) => {
     );
 
     if(checkUser){
+      setAuthToken(name);
       console.log("User login: " + name)
     }else{
       setError({ message: "Invalid login credentials!" });
