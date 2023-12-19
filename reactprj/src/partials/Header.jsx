@@ -14,7 +14,10 @@ export default function Header() {
             <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
               <Nav>
                 <Nav.Link href="/about">About</Nav.Link>
-                <Nav.Link href="/something">Something</Nav.Link>
+                <Nav.Link href="/" onClick={() => {
+                  localStorage.removeItem ("authToken")
+                  setAuthToken(false)
+                }}>Logout</Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Container>

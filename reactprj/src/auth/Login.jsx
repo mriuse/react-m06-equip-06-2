@@ -7,7 +7,7 @@ const Login = ({ toggleLogin }) => {
   let [password, setPassword] = useState("");
   let [error, setError] = useState({});
 
-  const { setAuthToken } = useContext(UserContext);
+  let { authToken, setAuthToken } = useContext(UserContext);
 
   let users = JSON.parse(localStorage.getItem("users")) || [];
 
@@ -20,6 +20,7 @@ const Login = ({ toggleLogin }) => {
     if(checkUser){
       setAuthToken(name);
       console.log("User login: " + name)
+      localStorage.setItem ("authToken",JSON.stringify(name));
     }else{
       setError({ message: "Invalid login credentials!" });
     }

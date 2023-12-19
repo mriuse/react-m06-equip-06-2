@@ -9,7 +9,8 @@ import Header from './partials/Header';
 import Footer from './partials/Footer';
 
 function App() {
-  let [authToken, setAuthToken] = useState("");
+  let storedAuthToken = JSON.parse(localStorage.getItem("authToken")) || '';
+  let [authToken, setAuthToken] = useState(storedAuthToken);
   return (
     <>
       <div className="body-custom">
