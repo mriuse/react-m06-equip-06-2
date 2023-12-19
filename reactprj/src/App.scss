@@ -5,10 +5,15 @@
 
 $theme-colors: (
   'primary': teal,
+  'secondary': #c2c2c2,
+  'danger': tomato,
+  'light': #ebebeb
 );
 
 .body-custom{
   font-family: 'Anybody', sans-serif;
+  background-color: #ebebeb;
+  color: #353535;
 }
 .nav-bar-custom {
   background-color: teal;
@@ -26,15 +31,13 @@ $theme-colors: (
 }
 
 .section-light{
-  background-color: #ebebeb;
-  color: #353535;
   padding: 100px 50px;
 }
 .section-dark, .section-links{
   background-color: #353535;
   color: white;
 }
-.section-light, .section-dark{
+.section-light, .section-dark, .section-links{
   padding: 100px 50px;
 }
 .section-footer{
