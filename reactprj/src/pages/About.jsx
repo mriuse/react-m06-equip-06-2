@@ -23,9 +23,8 @@ export default function App() {
             <Col className="d-flex flex-column align-items-center">
               <h1 className='mb-0'>Vols visitar-nos?</h1>
               <p className='mb-5'>Ubica'ns al mapa</p>
-              {/* Replace the placeholder image with your desired photo */}
               <img
-                src="https://via.placeholder.com/800x400" // Replace with your image URL
+                src="https://via.placeholder.com/800x400"
                 alt="Map"
                 style={{ width: '100%', height: 'auto' }}
               />

@@ -6,8 +6,15 @@ import './App.scss'
 import { UserContext } from "./userContext";
 
 import About from "./pages/About";
-import Places from "./pages/Places";
-import Posts from "./pages/Posts";
+
+import PlacesList from "./pages/places/PlacesList";
+import PlacesGrid from "./pages/places/PlacesGrid"; 
+import Place from "./pages/places/Place";
+import PlaceAdd from "./pages/places/PlaceAdd";
+import PlaceEdit from "./pages/places/PlaceEdit";
+
+import Posts from "./pages/posts/Posts";
+
 import NotFound from "./pages/NotFound";
 
 import LoginRegister from './auth/LoginRegister';
@@ -30,7 +37,11 @@ function App() {
                 <Route path="/" element={<About/>} />
                 <Route path="/about" element={<About/>} />
                 <Route path="/posts" element={<Posts/>} />
-                <Route path="/places" element={<Places/>} />
+                <Route path="/places" element={<PlacesList/>} />
+                <Route path="/places" element={<PlacesGrid/>} />
+                  <Route path="/places/add" element={ <PlaceAdd/> } />
+                  <Route path="/places/:id" element={ <Place/> } />
+                    <Route path="/places/:id/edit" element={ <PlaceEdit/> } />
               </Routes>
               <Footer/>
             </>

@@ -3,13 +3,15 @@ import { RiTwitterLine, RiFacebookCircleLine, RiGithubLine, RiLinkedinLine } fro
 
 
 export default function App() {
+  const { id } = useParams();
   return (
     <>
-      <div className="section-dark">
-        <Container className="d-flex justify-content-center align-items-center">
+      <div className="section-light">
+        <Container className="d-flex align-items-center">
           <Row>
-            <Col className="d-flex flex-column align-items-center">
-              <h1 className='mb-0'>Llocs</h1>
+          <h1 className='mb-0'>Lloc</h1>
+            <Col className="d-flex flex-column">
+              
               <p className='mb-5'>Placeholder text</p>
             </Col>
           </Row>
