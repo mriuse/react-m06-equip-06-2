@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { Container, Navbar, Nav, NavbarText, Button } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { UserContext } from "../userContext";
 
 export default function Header() {
   let { authToken, setAuthToken } = useContext(UserContext);
-
+  let navigate = useNavigate();
   return (
     <>
       <Navbar sticky="top" collapseOnSelect expand="lg" data-bs-theme="dark" className="nav-bar-custom">
