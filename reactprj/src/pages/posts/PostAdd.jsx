@@ -1,11 +1,10 @@
-import React, { useState, useContext} from 'react'
+import React, { useState, useContext, useEffect} from 'react'
 import { UserContext } from '../../userContext';
 import { Button } from 'react-bootstrap'
 import { v4 as uuidv4 } from 'uuid'
 
 const PostAdd = () => {
-  let { authToken } = useContext(UserContext);
-
+  let { authToken, setAuthToken } = useContext(UserContext);
   const [formData, setFormData] = useState({
     id: uuidv4(), 
     name: '',
@@ -15,7 +14,7 @@ const PostAdd = () => {
     longitude: '',
     visibility: 'public',
     author: {
-      name: '',
+      name: authToken,
       email: '', 
     }
   })
@@ -28,6 +27,28 @@ const PostAdd = () => {
   }
   const handleSubmit = (e) => {
     e.preventDefault();
+    let postsGuardats = [];
+
+    if(localStorage.getItem('posts')){
+      //Recull l'item posts i el transforma des d'un json a un array
+      const postsGuardatsJSON = localStorage.getItem('posts')
+      postsGuardats = postsGuardatsJSON ? JSON.parse(postsGuardatsJSON) : []
+    }
+    else{
+      let inicialitzacioPosts = []
+      localStorage.setItem("posts", JSON.stringify(inicialitzacioPosts))
+
+      //Recull l'item posts i el transforma des d'un json a un array
+      const postsGuardatsJSON = localStorage.getItem('posts')
+      postsGuardats = postsGuardatsJSON ? JSON.parse(postsGuardatsJSON) : []
+    }
+
+    //Creem el nou objecte post
+    let newPost = formData
+
+    postsGuardats.push(newPost)
+
+    localStorage.setItem("posts", JSON.stringify(postsGuardats))
 
     // Neteja el formulari
     setFormData({
@@ -38,8 +59,23 @@ const PostAdd = () => {
       visibility: 'public'
     })
   }
+
+  useEffect( ()=> {
+    navigator.geolocation.getCurrentPosition( (pos )=> {
+      setFormData({
+        ...formData,
+        latitude :  pos.coords.latitude,
+        longitude: pos.coords.longitude
+   
+      })
+      // console.log("Latitude is :", pos.coords.latitude);
+      // console.log("Longitude is :", pos.coords.longitude);
+    });
+  
+  
+   },[])
   return (
-    <form onSubmit={handleSubmit} className='d-flex flex-column px-4 pt-4 col-md-6 offset-md-3'>
+    <form onSubmit={handleSubmit} className='d-flex flex-column px-4 pt-3 col-md-6 offset-md-3'>
     
     <label> 
       <input type="hidden" name="id" value={formData.id}/>
@@ -71,7 +107,7 @@ const PostAdd = () => {
       </label>
     </div>
 
-    <div className='d-flex flex-column'>
+    <div className='d-flex flex-column py-3'>
       Visibilitat:
       <label>
         <input
@@ -106,7 +142,7 @@ const PostAdd = () => {
     </div>
 
     <label htmlFor="author"> 
-      <input type="hidden" name="id" value={formData.author}/>
+      <input type="hidden" name="id" value={formData.author.name}/>
     </label>
 
     <Button type="submit" variant='outline-primary'> Crear nou post </Button>
