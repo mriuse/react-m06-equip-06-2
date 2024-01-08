@@ -2,7 +2,7 @@ import { Container, Row, Col, Button} from 'react-bootstrap';
 import { RiTwitterLine, RiFacebookCircleLine, RiGithubLine, RiLinkedinLine } from "react-icons/ri";
 
 
-export default function App() {
+const Place = () => {
   const { id } = useParams();
   return (
     <>
@@ -20,3 +20,5 @@ export default function App() {
     </>
   )
 }
+
+export default Place;

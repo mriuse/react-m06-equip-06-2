@@ -2,7 +2,7 @@ import { Container, Row, Col, Button, InputGroup, FormControl } from 'react-boot
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-export default function App() {
+const PlacesList = () => {
   const [viewType, setViewType] = useState('list'); // State to manage view type (list/grid)
 
   const handleToggleView = () => {
@@ -20,7 +20,9 @@ export default function App() {
       <div className="section-light">
         <Container className="d-flex flex-column">
           <Row>
-            <h1 className='mb-5'>Afegir lloc nou</h1>
+            <Col>
+              <h1 className='mb-5'>Afegir lloc nou</h1>
+            </Col>
           </Row>
           <Row className='mb-5'>
             <Col>
@@ -85,3 +87,5 @@ export default function App() {
     </>
   )
 }
+
+export default PlacesList;
