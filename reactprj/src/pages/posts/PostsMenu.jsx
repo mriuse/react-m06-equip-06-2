@@ -1,19 +1,27 @@
 import React from 'react'
+import { Container, Navbar, Nav, NavbarText, Button } from 'react-bootstrap';
+import SearchBar from '../../partials/Searchbar';
+import { NavLink, useNavigate,useLocation } from 'react-router-dom';
+
 
 const PostsMenu = () => {
+  const location = useLocation();
   return (
     <div>
-        <nav className='d-flex flex-row justify-content-between .bg-dark'>
-            <div>
-                <button className=''>Afegir Entrada</button>
-                <button>Grid</button>
-                <button>List</button>
-            </div>
-            <div className='d-flex flex-row'>
-                <div>*buscador inactiu*</div>
-                <button>Go</button>
-            </div>
-        </nav>
+      <Navbar collapseOnSelect expand="lg" className='d-flex flex-column flex-md-row text-light bg-dark py-3 px-2'>
+        <div className='col-9 col-md-5 d-flex justify-content-between'>
+          <NavLink className='mx-2' to="/posts/add"><Button variant="outline-primary" size="sm"> Afegir Entrada  </Button></NavLink>
+          <div className='btn-group me-3'>
+            <NavLink to="/posts"><Button variant="outline-primary" size="sm"   active={location.pathname === '/posts'}> Grid </Button></NavLink>
+            <NavLink to="/posts/list"><Button variant="outline-primary" size="sm"active={location.pathname === '/posts/list'}> List </Button></NavLink>
+          </div>
+        </div>
+        
+        <div className='col-9 col-md-5 pt-3 pt-md-0'>
+          <SearchBar/>
+        </div>
+        
+      </Navbar>
     </div>
   )
 }

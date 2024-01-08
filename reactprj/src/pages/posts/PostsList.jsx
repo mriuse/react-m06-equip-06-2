@@ -1,8 +1,12 @@
 import React from 'react'
+import PostsMenu from './PostsMenu'
 
 const PostsList = () => {
   return (
-    <div>PostsList</div>
+    
+    <div>
+      <PostsMenu/>
+      PostsList</div>
   )
 }
 
