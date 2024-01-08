@@ -1,13 +1,46 @@
-import { Container, Row, Col, Button} from 'react-bootstrap';
-
+import { Container, Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function App() {
+  const [viewType, setViewType] = useState('list'); // State to manage view type (list/grid)
+
+  const handleToggleView = () => {
+    const newViewType = viewType === 'list' ? 'grid' : 'list';
+    setViewType(newViewType);
+  };
+
+  const handleSearch = () => {
+    // Handle search functionality here
+    console.log('Searching...');
+  };
+
   return (
     <>
       <div className="section-light">
         <Container className="d-flex flex-column">
+          <Row>
+            <h1 className='mb-5'>Afegir lloc nou</h1>
+          </Row>
           <Row className='mb-5'>
-            <h1>Llocs</h1>
+            <Col>
+              <InputGroup>
+                <Link to="/places/add">
+                  <Button variant="primary">+ Afegir lloc nou</Button>
+                </Link>
+                <Button variant="secondary" onClick={handleToggleView}>Canviar vista</Button>
+              </InputGroup>
+            </Col>
+            <Col xs={6}>
+              <InputGroup>
+                <FormControl
+                  placeholder="Cercar un lloc..."
+                  aria-label="Search"
+                  aria-describedby="basic-addon2"
+                />
+                <Button variant="secondary" onClick={handleSearch}>Cercar</Button>
+              </InputGroup>
+            </Col>
           </Row>
           <Row className='mb-3'>
             <Col>
@@ -28,10 +61,10 @@ export default function App() {
             <hr></hr>
           </Row>
           <Row>
-            <Col>
+            <Col className="img-container">
             <img
-                src="https://via.placeholder.com/320x320"
-                style={{ width: '100%', height: 'auto' }}
+                src="https://via.placeholder.com/300x200"
+                style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto' }}
               />
             </Col>
             <Col>
