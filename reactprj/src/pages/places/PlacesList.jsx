@@ -1,9 +1,12 @@
 import { Container, Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import PlaceList from './PlaceList';
 
 const PlacesList = () => {
-  const [viewType, setViewType] = useState('list'); // State to manage view type (list/grid)
+  let places = localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : [];
+
+  const [viewType, setViewType] = useState('list');
 
   const handleToggleView = () => {
     const newViewType = viewType === 'list' ? 'grid' : 'list';
@@ -21,20 +24,18 @@ const PlacesList = () => {
         <Container className="d-flex flex-column">
           <Row>
             <Col>
-              <h1 className='mb-5'>Afegir lloc nou</h1>
+              <h1 className='mb-5'>Llocs</h1>
             </Col>
           </Row>
           <Row className='mb-5'>
             <Col>
-              <InputGroup>
                 <Link to="/places/add">
-                  <Button variant="primary">+ Afegir lloc nou</Button>
+                  <Button variant="primary" className='m-1'>+ Afegir lloc nou</Button>
                 </Link>
-                <Button variant="secondary" onClick={handleToggleView}>Canviar vista</Button>
-              </InputGroup>
+                <Button variant="secondary" className='m-1' onClick={handleToggleView}>Canviar vista</Button>
             </Col>
             <Col xs={6}>
-              <InputGroup>
+              <InputGroup className='m-1'>
                 <FormControl
                   placeholder="Cercar un lloc..."
                   aria-label="Search"
@@ -45,43 +46,32 @@ const PlacesList = () => {
             </Col>
           </Row>
           <Row className='mb-3'>
-            <Col>
-              <h4>Imatge</h4>
+            <Col className="d-none d-lg-block">
+              <h5>Imatge</h5>
             </Col>
-            <Col>
-              <h4>Nom de lloc</h4>
+            <Col xs={3}>
+              <h5>Nom de lloc</h5>
             </Col>
-            <Col>
-              <h4>Descripció</h4>
+            <Col xs={3}>
+              <h5>Autor</h5>
             </Col>
-            <Col>
-              <h4>Data de creació</h4>
+            <Col xs={3}>
+              <h5>Data creació</h5>
             </Col>
-            <Col>
-              <h4>Accions</h4>
+            <Col xs={1}>
+              <h5>Accions</h5>
             </Col>
-            <hr></hr>
           </Row>
           <Row>
-            <Col className="img-container">
-            <img
-                src="https://via.placeholder.com/300x200"
-                style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto' }}
-              />
-            </Col>
-            <Col>
-              <p>Nom de lloc</p>
-            </Col>
-            <Col>
-              <p>Aquesta és una descripció</p>
-            </Col>
-            <Col>
-              <p>12:00 12-12-2012</p>
-            </Col>
-            <Col>
-              <Button>Veure info</Button>
-            </Col>
+            <hr></hr>
           </Row>
+          { places.map( (item)=> { return (
+            <>
+              { item.visibility == "public" || item.author.email == usuari ? (<PlaceList key={item.id} item={item}/>) : <></> 
+              }
+            </>
+            )
+          })}
         </Container>
       </div>
     </>

@@ -1,19 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { UserContext } from "../../userContext";
 
 const PlaceAdd = () => {
+
+  const navigate = useNavigate();
+
+  let { authToken, setAuthToken } = useContext(UserContext);
+
+  let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
+  const user = users.find(user => user.name === authToken);
+
   const [data, setData] = useState({
     id: uuidv4(),
     name: '',
     description: '',
     longitude: '',
     latitude: '',
-    visibility: ''
+    author: {
+      name: user.name,
+      email: user.email
+    },
+    visibility: 'public'
   });
+
+  useEffect( ()=> {
+    navigator.geolocation.getCurrentPosition( (pos )=> {
+      setData({
+        ...data,
+        latitude :  pos.coords.latitude,
+        longitude: pos.coords.longitude,
+      });
+      console.log("Latitude is :", pos.coords.latitude);
+      console.log("Longitude is :", pos.coords.longitude);
+    });
+   },[]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
     setData({
       ...data,
       [name]: value,
@@ -22,27 +49,31 @@ const PlaceAdd = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-
     let places = localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : [];
 
     const newPlace = {
       ...data,
       id: uuidv4(),
+      visibility: data.visibility
     };
 
     places.push(newPlace);
     localStorage.setItem('places', JSON.stringify(places));
 
-    // Clear the form after submission
     setData({
-      id: uuidv4(),
+      id: '',
       name: '',
       description: '',
       longitude: '',
       latitude: '',
-      visibility: ''
+      author: {
+        name: '',
+        email: ''
+      },
+      visibility: 'public'
     });
+
+    navigate("/places");
   };
 
   return (
@@ -75,9 +106,9 @@ const PlaceAdd = () => {
               <Form.Group className='mb-4' controlId="visibility">
                 <Form.Label>Visibilitat</Form.Label>
                 <Form.Control as="select" name="visibility" value={data.visibility} onChange={handleInputChange}>
-                  <option>Public</option>
-                  <option>Contactes</option>
-                  <option>Privada</option>
+                  <option value="public">Public</option>
+                  <option value="contacts">Contactes</option>
+                  <option value="private">Privada</option>
                 </Form.Control>
               </Form.Group>
               <Button variant="primary" type="submit">
