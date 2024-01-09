@@ -1,34 +1,34 @@
 import { Row, Col, Button } from 'react-bootstrap';
 
-const PlaceList = ({item}) => {
+const PlaceGrid = ({item}) => {
   return (
     <>
-      <Row>
-        <Col className="d-none d-lg-block img-container">
-        <img
+      <Col className='mb-5'>
+        <Col className='mb-3'>
+          <img
             src={item.image}
             style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto' }}
           />
         </Col>
-        <Col xs={3}>
-          <p>{item.name}</p>
-        </Col>
-        <Col xs={3}>
-          <p>{item.author.name}</p>
-        </Col>
-        <Col xs={3}>
-          <p>{item.date}</p>
+        <Col className='mb-3'>
+          <h3>{item.name}</h3>
         </Col>
         <Col>
-          <div className="d-grid gap-1">
+          <p><b>Creat per: </b>{item.author.name}</p>
+        </Col>
+        <Col>
+          <p><b>Data: </b>{item.date}</p>
+        </Col>
+        <Col>
+          <div className="d-grid gap-2">
             <Button variant="secondary">Detalls</Button>
             <Button variant="secondary">Editar</Button>
             <Button variant="danger">Eliminar</Button>
           </div>
-        </Col>  
-      </Row>
+        </Col>
+      </Col>
     </>
   )
 }
 
-export default PlaceList;
+export default PlaceGrid;

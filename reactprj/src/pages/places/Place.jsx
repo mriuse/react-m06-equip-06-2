@@ -1,6 +1,5 @@
 import { Container, Row, Col, Button} from 'react-bootstrap';
-import { RiTwitterLine, RiFacebookCircleLine, RiGithubLine, RiLinkedinLine } from "react-icons/ri";
-
+import { useParams } from 'react-router-dom';
 
 const Place = () => {
   const { id } = useParams();

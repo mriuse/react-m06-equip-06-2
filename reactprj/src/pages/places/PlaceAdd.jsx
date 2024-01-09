@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+
 import { UserContext } from "../../userContext";
 
 const PlaceAdd = () => {
@@ -13,15 +14,20 @@ const PlaceAdd = () => {
   let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
   const user = users.find(user => user.name === authToken);
 
+  let placeDate =  new Date();
+  let placeDateStr = placeDate.toDateString();
+
   const [data, setData] = useState({
     id: uuidv4(),
     name: '',
     description: '',
+    image: '',
     longitude: '',
     latitude: '',
+    date: '',
     author: {
-      name: user.name,
-      email: user.email
+      name: '',
+      email: ''
     },
     visibility: 'public'
   });
@@ -54,7 +60,11 @@ const PlaceAdd = () => {
     const newPlace = {
       ...data,
       id: uuidv4(),
-      visibility: data.visibility
+      date: placeDateStr,
+      author: {
+        name: user.name,
+        email: user.email
+      },
     };
 
     places.push(newPlace);
@@ -64,8 +74,10 @@ const PlaceAdd = () => {
       id: '',
       name: '',
       description: '',
+      image: '',
       longitude: '',
       latitude: '',
+      date: '',
       author: {
         name: '',
         email: ''
@@ -94,6 +106,10 @@ const PlaceAdd = () => {
               <Form.Group className='mb-2' controlId="description">
                 <Form.Label>Descripció</Form.Label>
                 <Form.Control as="textarea" rows={3} name="description" value={data.description} onChange={handleInputChange} />
+              </Form.Group>
+              <Form.Group className='mb-3' controlId="image">
+                <Form.Label>URL Imatge</Form.Label>
+                <Form.Control type="text" name="image" value={data.image} onChange={handleInputChange} />
               </Form.Group>
               <Form.Group className='mb-2' controlId="longitude">
                 <Form.Label>Longitud</Form.Label>
