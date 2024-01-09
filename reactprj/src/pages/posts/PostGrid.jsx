@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-const PostGrid = ({item}) => {
+const PostGrid = ({item, user}) => {
   const postId = item.id
   return (
     <div className='d-flex flex-row border rounded col-lg-4'>
@@ -12,12 +12,14 @@ const PostGrid = ({item}) => {
                 <p>{item.description}</p>
                 <p className='text-danger'>Like</p>
             </div>
+            {item.author.name === user ? (
+                <div className='row pb-3 d-flex flex-wrap'>
+                    <a className='text-primary text-decoration-none px-1 small-text col-md-4'>Veure</a>
+                    <a className='text-primary text-decoration-none px-1 small-text col-md-4'>Editar</a>
+                    <a className='text-primary text-decoration-none px-1 small-text col-md-4'>Esborrar</a>
+                </div>  
+            ) : null }
             
-            <div className='row pb-3 d-flex flex-wrap'>
-                <a className='text-primary text-decoration-none px-1 small-text col-md-4'>Veure</a>
-                <a className='text-primary text-decoration-none px-1 small-text col-md-4'>Editar</a>
-                <a className='text-primary text-decoration-none px-1 small-text col-md-4'>Esborrar</a>
-            </div>
         </div>
     </div>
   )

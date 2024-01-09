@@ -20,7 +20,7 @@ const PostsGrid = () => {
             { postList.map( (item )=> { return (
               <>
                 { item.visibility == 'public' || item.author.name == authToken ? (
-                  <PostGrid key={item.id} item={item}/>
+                  <PostGrid key={item.id} item={item} user={authToken} />
                 ) : <></> 
                 }     
               </>
