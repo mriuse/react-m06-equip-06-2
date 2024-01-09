@@ -1,11 +1,16 @@
 import React, {useContext} from 'react'
-
+import { useNavigate } from 'react-router-dom';
 
 const PostList = ({item, user} ) => {
-  const postId = item.id
+  const navigate = useNavigate();
+
+  const navTo = (page) => {
+      navigate(page)
+  }
+
   return (
     <tr>
-      <th className='px-1 py-3'>{item.name}</th>
+      <th className='px-1 py-3' onClick={() => navTo(`/post/${item.id}`)}>{item.name}</th>
       <th className='px-1'>{item.description}</th>
       <th className='px-1'>{item.latitude}</th>
       <th className='px-1'>{item.longitude}</th>

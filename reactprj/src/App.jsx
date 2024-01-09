@@ -38,7 +38,7 @@ function App() {
                 <Route path="/posts/add" element={ <PostAdd/> } />
                 <Route path="/posts" element={ <PostsGrid/> } />
                 <Route path="/posts/edit/:id" element={ <PostEdit/> } /> 
-                <Route path="/posts/:id" element={ <Post/> } />
+                <Route path="/post/:id" element={ <Post/> } />
               </Routes>
               <Footer/>
             </>

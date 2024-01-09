@@ -1,7 +1,7 @@
 import React from 'react'
-import { Container, Navbar, Nav, NavbarText, Button } from 'react-bootstrap';
+import { Navbar, Button } from 'react-bootstrap';
 import SearchBar from '../../partials/Searchbar';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 const PostsMenu = () => {

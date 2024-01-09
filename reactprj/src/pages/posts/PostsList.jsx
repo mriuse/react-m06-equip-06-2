@@ -31,7 +31,7 @@ const PostsList = () => {
                 </tr>
               </thead>
               <tbody>
-                { posts.map( (item )=> { return (
+                { posts.map( (item)=> { return (
                   <>
                     { item.visibility == 'public' || item.author.name == authToken ? (<PostList  key={item.id} item={item} user={authToken}/>) : <></> 
                     }
