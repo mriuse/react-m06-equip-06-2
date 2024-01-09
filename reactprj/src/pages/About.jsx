@@ -1,8 +1,13 @@
 import { Container, Row, Col, Button} from 'react-bootstrap';
 import { RiTwitterLine, RiFacebookCircleLine, RiGithubLine, RiLinkedinLine } from "react-icons/ri";
-
+import { fromLonLat } from "ol/proj";
+import "ol/ol.css";
+import { RMap, ROSM } from "rlayers";
 
 export default function App() {
+  
+const center = fromLonLat([1.72870, 41.23112]);
+
   return (
     <>
       <div className="section-dark">
@@ -19,18 +24,13 @@ export default function App() {
 
       <div className="section-light">
         <Container className="d-flex justify-content-center align-items-center h-100">
-          <Row>
             <Col className="d-flex flex-column align-items-center">
               <h1 className='mb-0'>Vols visitar-nos?</h1>
               <p className='mb-5'>Ubica'ns al mapa</p>
-              {/* Replace the placeholder image with your desired photo */}
-              <img
-                src="https://via.placeholder.com/800x400" // Replace with your image URL
-                alt="Map"
-                style={{ width: '100%', height: 'auto' }}
-              />
+              <RMap width={"80%"} height={"70vh"} initial={{ center: center, zoom: 18 }}>
+                <ROSM />
+              </RMap>
             </Col>
-          </Row>
         </Container>
       </div>
 
