@@ -34,16 +34,8 @@ const PostAdd = () => {
       const postsGuardatsJSON = localStorage.getItem('posts')
       postsGuardats = postsGuardatsJSON ? JSON.parse(postsGuardatsJSON) : []
     }
-    else{
-      let inicialitzacioPosts = []
-      localStorage.setItem("posts", JSON.stringify(inicialitzacioPosts))
 
-      //Recull l'item posts i el transforma des d'un json a un array
-      const postsGuardatsJSON = localStorage.getItem('posts')
-      postsGuardats = postsGuardatsJSON ? JSON.parse(postsGuardatsJSON) : []
-    }
-
-    //Creem el nou objecte post
+    //Creem el nou objecte post i el guardem a localstorage
     let newPost = formData
 
     postsGuardats.push(newPost)
@@ -53,6 +45,7 @@ const PostAdd = () => {
     // Neteja el formulari
     setFormData({
       ...formData,
+      id: uuidv4(), 
       name: '',
       description: '',
       upload: '',

@@ -45,5 +45,9 @@ $theme-colors: (
   padding: 25px 50px;
 }
 
+.small-text{
+  font-size: 0.8rem;
+}
+
 /* import bootstrap to set changes */
 @import 'bootstrap/scss/bootstrap';
