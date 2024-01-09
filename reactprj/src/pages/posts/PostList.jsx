@@ -1,13 +1,12 @@
 import React, {useContext} from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const PostList = ({item, user} ) => {
+const PostList = ({item, user, deletePost} ) => {
   const navigate = useNavigate();
 
   const navTo = (page) => {
       navigate(page)
   }
-
   return (
     <tr>
       <th className='px-1 py-3' onClick={() => navTo(`/post/${item.id}`)}>{item.name}</th>
@@ -19,7 +18,7 @@ const PostList = ({item, user} ) => {
       <th className='px-1 text-danger'>Like</th>
       {item.author.name === user ? (
         <th className='px-1 text-warning text-decoration-none'>
-          <a href="">Editar</a> / <a href="">Esborrar</a>
+          <a onClick={() => navTo(`/post/edit/${item.id}`)}>Editar</a> / <a onClick={()=>deletePost(item.id)}>Esborrar</a>
         </th>
       ) : <th> Només disponible per l'autor - {item.author.name} </th> }
     </tr>

@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
 
-const PostGrid = ({item, user}) => {
+const PostGrid = ({item, user, deletePost}) => {
   const navigate = useNavigate();
 
   const navTo = (page) => {
@@ -23,8 +23,8 @@ const PostGrid = ({item, user}) => {
                 </div>
                 {item.author.name === user ? (
                     <div className='col-md-8'>
-                        <a className='text-primary text-decoration-none px-1 small-text'>Editar</a>
-                        <a className='text-primary text-decoration-none px-1 small-text'>Esborrar</a>
+                        <a className='text-primary text-decoration-none px-1 small-text' onClick={() => navTo(`/post/edit/${item.id}`)}>Editar</a>
+                        <a className='text-primary text-decoration-none px-1 small-text' onClick={() =>deletePost(item.id)}>Esborrar</a>
                     </div>
                 ) : null }
             </div>

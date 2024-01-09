@@ -13,6 +13,23 @@ const PostsList = () => {
       const postsGuardats = JSON.parse(postsGuardatsJSON)
       setPosts(postsGuardats)
   })
+
+  const deletePost = (id) => {
+    let postsGuardats = [];
+    // Trec l'array de posts de localstorage
+    const postsGuardatsJSON = localStorage.getItem('posts')
+    postsGuardats = postsGuardatsJSON ? JSON.parse(postsGuardatsJSON) : []
+    // Busco la key del post que estic editant
+    let postKey = postsGuardats.findIndex((post) => post.id === id)
+    // Esborro el post
+    postsGuardats.splice(postKey, 1)
+    // Torno a guardar l'array a localstorage
+    localStorage.setItem('posts', JSON.stringify(postsGuardats))
+    // Actualitzo l'array de posts de la pagina
+    setPostList(postsGuardats)
+  }
+
+
   return (
         <div>
           <PostsMenu/>
@@ -33,7 +50,7 @@ const PostsList = () => {
               <tbody>
                 { posts.map( (item)=> { return (
                   <>
-                    { item.visibility == 'public' || item.author.name == authToken ? (<PostList  key={item.id} item={item} user={authToken}/>) : <></> 
+                    { item.visibility == 'public' || item.author.name == authToken ? (<PostList  key={item.id} item={item} user={authToken} deletePost={deletePost}/>) : <></> 
                     }
                         
                   </>

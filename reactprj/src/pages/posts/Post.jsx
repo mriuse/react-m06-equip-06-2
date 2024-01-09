@@ -1,14 +1,15 @@
 import { Container, Row, Col, Button} from 'react-bootstrap';
 import {useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 
 export default function App() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [post, setPost] = useState({
-    id: uuidv4(), 
+    id: '', 
     name: '',
     description: '',
     upload: '',
@@ -16,7 +17,7 @@ export default function App() {
     longitude: '',
     visibility: 'public',
     author: {
-      name: authToken,
+      name: '',
       email: '', 
     }
   })
@@ -30,6 +31,21 @@ export default function App() {
     setPost(postTrobat)
     setIsLoading(false)
   })
+
+  const deletePost = (id) => {
+    let postsGuardats = [];
+    // Trec l'array de posts de localstorage
+    const postsGuardatsJSON = localStorage.getItem('posts')
+    postsGuardats = postsGuardatsJSON ? JSON.parse(postsGuardatsJSON) : []
+    // Busco la key del post que estic editant
+    let postKey = postsGuardats.findIndex((post) => post.id === id)
+    // Esborro el post
+    postsGuardats.splice(postKey, 1)
+    // Torno a guardar l'array a localstorage
+    localStorage.setItem('posts', JSON.stringify(postsGuardats))
+    // Com que ara tinc una pagina buida, torno a posts
+    navigate('/posts')
+}
 
   return (
     <>
@@ -55,8 +71,8 @@ export default function App() {
                 
                 {post.author.name === storedAuthToken ? (
                   <div className='row pb-3 d-flex flex-wrap'>
-                      <a className='text-primary text-decoration-none px-1 small-text col-md-4'>Editar</a>
-                      <a className='text-primary text-decoration-none px-1 small-text col-md-4'>Esborrar</a>
+                      <a className='text-primary text-decoration-none px-1 small-text col-md-4' onClick={() => navigate(`/post/edit/${post.id}`)}>Editar</a>
+                      <a className='text-primary text-decoration-none px-1 small-text col-md-4'onClick={() => deletePost(post.id)} >Esborrar</a>
                   </div>  
                 ) : null }
               </ListGroup.Item>
