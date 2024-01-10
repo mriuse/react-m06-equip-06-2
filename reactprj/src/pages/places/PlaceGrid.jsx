@@ -1,6 +1,6 @@
 import { Row, Col, Button } from 'react-bootstrap';
 
-const PlaceGrid = ({item}) => {
+const PlaceGrid = ({item, isAuthor}) => {
   return (
     <>
       <Col className='mb-5'>
@@ -22,8 +22,12 @@ const PlaceGrid = ({item}) => {
         <Col>
           <div className="d-grid gap-2">
             <Button variant="secondary">Detalls</Button>
-            <Button variant="secondary">Editar</Button>
-            <Button variant="danger">Eliminar</Button>
+            {isAuthor && (
+              <>
+                <Button variant="secondary">Editar</Button>
+                <Button variant="danger">Eliminar</Button>
+              </>
+            )}
           </div>
         </Col>
       </Col>

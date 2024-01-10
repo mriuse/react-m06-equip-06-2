@@ -1,9 +1,9 @@
 import { Row, Col, Button } from 'react-bootstrap';
 
-const PlaceList = ({item}) => {
+const PlaceList = ({item, isAuthor}) => {
   return (
     <>
-      <Row>
+      <Row className='mb-3 mb-lg-0'>
         <Col className="d-none d-lg-block img-container">
         <img
             src={item.image}
@@ -20,10 +20,14 @@ const PlaceList = ({item}) => {
           <p>{item.date}</p>
         </Col>
         <Col>
-          <div className="d-grid gap-1">
+        <div className="d-grid gap-2">
             <Button variant="secondary">Detalls</Button>
-            <Button variant="secondary">Editar</Button>
-            <Button variant="danger">Eliminar</Button>
+            {isAuthor && (
+              <>
+                <Button variant="secondary">Editar</Button>
+                <Button variant="danger">Eliminar</Button>
+              </>
+            )}
           </div>
         </Col>  
       </Row>

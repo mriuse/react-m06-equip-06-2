@@ -1,11 +1,15 @@
-import { Container, Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
+import { useContext } from 'react';
+import { UserContext } from "../../userContext";
 import PlaceGrid from './PlaceGrid';
 import PlacesMenu from './PlacesMenu'
 
 const PlacesGrid = () =>  {
+  let { authToken, setAuthToken } = useContext(UserContext);
   let places = localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : [];
   
+  let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
+  const user = users.find(user => user.name === authToken);
 
   return (
     <>
@@ -18,12 +22,15 @@ const PlacesGrid = () =>  {
           </Row>
           <PlacesMenu/>
           <Row xs={1} sm={2} md={3} xl={4}>
-            { places.map( (item)=> { return (
-            <>
-              { item.visibility == "public" || item.author.email == usuari ? (<PlaceGrid key={item.id} item={item}/>) : <></> 
-              }
-            </>
-            )
+            { places.map( (item)=> { 
+              let isAuthor = item.author.email === user.email;
+              return (
+                <>
+                  { 
+                    item.visibility == "public" || isAuthor ? (<PlaceGrid key={item.id} item={item} isAuthor={isAuthor}/>) : <></> 
+                  }
+                </>
+              )
             })}
           </Row>
         </Container>

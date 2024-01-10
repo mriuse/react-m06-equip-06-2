@@ -15,7 +15,7 @@ export default function Header() {
             <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
               <Nav className="me-auto">
                 <NavLink className="nav-link" to="/about">About</NavLink>
-                <NavLink className="nav-link" to="/places">Llocs</NavLink>
+                <NavLink className="nav-link" to="/places/list">Llocs</NavLink>
                 <NavLink className="nav-link" to="/posts">Posts</NavLink>
               </Nav>
               <Nav>

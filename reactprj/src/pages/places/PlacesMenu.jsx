@@ -1,4 +1,4 @@
-import { Container, Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
 const PlacesMenu = () => {

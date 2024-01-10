@@ -1,10 +1,15 @@
-import { Container, Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
+import { useContext } from 'react';
+import { UserContext } from "../../userContext";
 import PlaceList from './PlaceList';
 import PlacesMenu from './PlacesMenu'
 
 const PlacesList = () => {
+  let { authToken, setAuthToken } = useContext(UserContext);
   let places = localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : [];
+
+  let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
+  const user = users.find(user => user.name === authToken);
 
   return (
     <>
@@ -36,13 +41,16 @@ const PlacesList = () => {
           <Row>
             <hr></hr>
           </Row>
-          { places.map( (item)=> { return (
-            <>
-              { item.visibility == "public" || item.author.email == usuari ? (<PlaceList key={item.id} item={item}/>) : <></> 
-              }
-            </>
-            )
-          })}
+          { places.map( (item)=> { 
+              let isAuthor = item.author.email === user.email;
+              return (
+                <>
+                  { 
+                    item.visibility == "public" || isAuthor ? (<PlaceList key={item.id} item={item} isAuthor={isAuthor}/>) : <></> 
+                  }
+                </>
+              )
+            })}
         </Container>
       </div>
     </>
