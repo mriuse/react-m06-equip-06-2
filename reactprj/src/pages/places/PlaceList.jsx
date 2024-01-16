@@ -28,7 +28,7 @@ const PlaceList = ({item, isAuthor}) => {
             <Button variant="secondary" onClick={()=>navigate("/places/"+item.id)}>Detalls</Button>
             {isAuthor && (
               <>
-                <Button variant="secondary" onClick={()=>navigate("/places/"+item.id)+"/edit"}>Editar</Button>
+                <Button variant="secondary" onClick={()=>navigate("/places/"+item.id+"/edit")}>Editar</Button>
                 <Button variant="danger" onClick={()=>navigate("/places/"+item.id+"/delete")}>Eliminar</Button>
               </>
             )}

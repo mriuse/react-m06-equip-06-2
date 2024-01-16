@@ -41,16 +41,18 @@ const PlacesList = () => {
           <Row>
             <hr></hr>
           </Row>
-          { places.map( (item)=> { 
-              let isAuthor = item.author.email === user.email;
-              return (
-                <>
-                  { 
-                    item.visibility == "public" || isAuthor ? (<PlaceList key={item.id} item={item} isAuthor={isAuthor}/>) : <></> 
-                  }
-                </>
-              )
-            })}
+          {places.map((item) => {
+            let isAuthor = item.author.email === user.email;
+            return (
+              <div key={item.id}>
+                {
+                  item.visibility === "public" || isAuthor ? (
+                    <PlaceList key={item.id} item={item} isAuthor={isAuthor} />
+                  ) : <></>
+                }
+              </div>
+            );
+          })}
         </Container>
       </div>
     </>

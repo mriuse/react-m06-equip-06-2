@@ -31,6 +31,8 @@ const PlaceAdd = () => {
     visibility: 'public'
   });
 
+  let [error, setError] = useState();
+
   useEffect( ()=> {
     navigator.geolocation.getCurrentPosition( (pos) => {
       setData({
@@ -54,37 +56,52 @@ const PlaceAdd = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let places = localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : [];
+    try {
+      if (data.name === "" || data.description === "" || data.image === "") {
+        throw new Error("Error: No s'accepten camps buits al formulari.");
+      }
+      if (data.latitude > 90 || data.latitude < -90){
+        throw new Error("Error: Latitud invàlida.");
+      }
+      if (data.longitude > 180 || data.longitude < -180){
+        throw new Error("Error: Longitud invàlida.");
+      }
 
-    const newPlace = {
-      ...data,
-      id: uuidv4(),
-      date: placeDateStr,
-      author: {
-        name: user.name,
-        email: user.email
-      },
-    };
+      let places = localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : [];
 
-    places.push(newPlace);
-    localStorage.setItem('places', JSON.stringify(places));
+      const newPlace = {
+        ...data,
+        id: uuidv4(),
+        date: placeDateStr,
+        author: {
+          name: user.name,
+          email: user.email
+        },
+      };
 
-    setData({
-      id: '',
-      name: '',
-      description: '',
-      image: '',
-      longitude: '',
-      latitude: '',
-      date: '',
-      author: {
+      places.push(newPlace);
+      localStorage.setItem('places', JSON.stringify(places));
+
+      setData({
+        id: '',
         name: '',
-        email: ''
-      },
-      visibility: 'public'
-    });
+        description: '',
+        image: '',
+        longitude: '',
+        latitude: '',
+        date: '',
+        author: {
+          name: '',
+          email: ''
+        },
+        visibility: 'public'
+      });
 
-    navigate("/places");
+      navigate(-1);
+
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -95,6 +112,13 @@ const PlaceAdd = () => {
             <h1 className='mb-4'>Afegir lloc nou</h1>
           </Col>
         </Row>
+        {error && (
+          <Row>
+            <Col>
+              <p className="text-danger">{error}</p>
+            </Col>
+          </Row>
+        )}
         <Row>
           <Col>
             <Form onSubmit={handleSubmit}>

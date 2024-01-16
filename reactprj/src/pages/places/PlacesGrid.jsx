@@ -25,11 +25,13 @@ const PlacesGrid = () =>  {
             { places.map( (item)=> { 
               let isAuthor = item.author.email === user.email;
               return (
-                <>
+                <div key={item.id}>
                   { 
-                    item.visibility == "public" || isAuthor ? (<PlaceGrid key={item.id} item={item} isAuthor={isAuthor}/>) : <></> 
+                    item.visibility == "public" || isAuthor ? (
+                      <PlaceGrid key={item.id} item={item} isAuthor={isAuthor}/>
+                    ) : <></> 
                   }
-                </>
+                </div>
               )
             })}
           </Row>

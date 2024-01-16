@@ -1,30 +1,39 @@
 import { Container, Row, Col, Button, InputGroup} from 'react-bootstrap';
 import InputGroupText from 'react-bootstrap/esm/InputGroupText';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { UserContext } from "../../userContext";
 
 const Place = () => {
+  let { authToken, setAuthToken } = useContext(UserContext);
   const { id } = useParams();
   const [place, setPlace] = useState(null);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
-    const places = JSON.parse(localStorage.getItem('places')) || [];
-    const place = places.find(item => item.id === id);
+    const fetchData = async () => {
+      try {
+        if (id) {
+          const places = JSON.parse(localStorage.getItem('places')) || [];
+          const placeData = places.find(item => item.id === id);
 
-    if (place) {
-      setPlace(place);
-    }
+          if (placeData) {
+            setPlace(placeData);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching place data:', error);
+      }
+    };
+
+    fetchData();
   }, [id]);
 
   if (!place) {
     return <p>Carregant...</p>;
   }
-
-  let { authToken, setAuthToken } = useContext(UserContext);
+  
   let isAuthor = place.author.email === authToken;
 
   return (
@@ -68,7 +77,7 @@ const Place = () => {
                 { isAuthor && 
                   (
                     <>
-                      <Button variant="secondary" onClick={()=>navigate("/places/"+item.id)+"/edit"}>Editar</Button>
+                      <Button variant="secondary" onClick={()=>navigate("/places/"+item.id+"/edit")}>Editar</Button>
                       <Button className="mx-1" variant="danger" onClick={()=>navigate("/places/"+item.id+"/delete")}>Eliminar</Button>
                     </>
                   )

@@ -1,16 +1,28 @@
-import { useState } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { useState, useEffect, useContext } from 'react';
+import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { UserContext } from "../../userContext";
 
 const PlaceEdit = () => {
+
+  const navigate = useNavigate();
+
+  let { authToken, setAuthToken } = useContext(UserContext);
+  const { id } = useParams();
+
+  const places = JSON.parse(localStorage.getItem('places')) || [];
+  
+  const index = places.findIndex((item) => item.id === id);
+
   const [data, setData] = useState({
-    id: uuidv4(),
-    name: '',
-    description: '',
-    longitude: '',
-    latitude: '',
-    visibility: ''
+    name: places[index].name,
+    description: places[index].description,
+    image: places[index].image,
+    visibility: places[index].visibility
   });
+
+  let [error, setError] = useState();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,27 +34,21 @@ const PlaceEdit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+    try {
+      if (data.name === "" || data.description === "" || data.image === "") {
+        throw new Error("Error: No s'accepten camps buits al formulari.");
+      }
 
-    let places = localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : [];
+      places[index].name = data.name;
+      places[index].description = data.description;
+      places[index].image = data.image;
+      places[index].visibility = data.visibility;
+      localStorage.setItem('places', JSON.stringify(places));
 
-    const newPlace = {
-      ...data,
-      id: uuidv4(),
-    };
-
-    places.push(newPlace);
-    localStorage.setItem('places', JSON.stringify(places));
-
-    // Clear the form after submission
-    setData({
-      id: uuidv4(),
-      name: '',
-      description: '',
-      longitude: '',
-      latitude: '',
-      visibility: ''
-    });
+      navigate(-1);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -50,9 +56,16 @@ const PlaceEdit = () => {
       <Container className="d-flex flex-column">
         <Row>
           <Col>
-            <h1 className='mb-4'>Afegir lloc nou</h1>
+            <h1 className='mb-4'>Editar lloc</h1>
           </Col>
         </Row>
+        {error && (
+          <Row>
+            <Col>
+              <p className="text-danger">{error}</p>
+            </Col>
+          </Row>
+        )}
         <Row>
           <Col>
             <Form onSubmit={handleSubmit}>
@@ -64,20 +77,16 @@ const PlaceEdit = () => {
                 <Form.Label>Descripció</Form.Label>
                 <Form.Control as="textarea" rows={3} name="description" value={data.description} onChange={handleInputChange} />
               </Form.Group>
-              <Form.Group className='mb-2' controlId="longitude">
-                <Form.Label>Longitud</Form.Label>
-                <Form.Control type="number" placeholder="0.000001" step="0.000001" name="longitude" value={data.longitude} onChange={handleInputChange} />
-              </Form.Group>
-              <Form.Group className='mb-2' controlId="latitude">
-                <Form.Label>Latitud</Form.Label>
-                <Form.Control type="number" placeholder="0.000001" step="0.000001" name="latitude" value={data.latitude} onChange={handleInputChange} />
+              <Form.Group className='mb-3' controlId="image">
+                <Form.Label>URL Imatge</Form.Label>
+                <Form.Control type="text" name="image" value={data.image} onChange={handleInputChange} />
               </Form.Group>
               <Form.Group className='mb-4' controlId="visibility">
                 <Form.Label>Visibilitat</Form.Label>
                 <Form.Control as="select" name="visibility" value={data.visibility} onChange={handleInputChange}>
-                  <option>Public</option>
-                  <option>Contactes</option>
-                  <option>Privada</option>
+                  <option value="public">Public</option>
+                  <option value="contacts">Contactes</option>
+                  <option value="private">Privada</option>
                 </Form.Control>
               </Form.Group>
               <Button variant="primary" type="submit">
