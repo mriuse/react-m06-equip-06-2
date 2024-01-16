@@ -1,7 +1,7 @@
 import { Container, Row, Col, Button} from 'react-bootstrap';
 import React, { useState, useContext, useEffect} from 'react'
 import { RiTwitterLine, RiFacebookCircleLine, RiGithubLine, RiLinkedinLine } from "react-icons/ri";
-import Keypress from '../partials/Keypress';
+// import Keypress from '../partials/Keypress';
 
 import Card from 'react-bootstrap/Card';
 import Alert from 'react-bootstrap/Alert';
@@ -19,7 +19,7 @@ export default function App() {
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
 
-  var listener = new window.keypress.Listener();
+  // var listener = new window.keypress.Listener();
   const [toggleCoords, setToggleCoords] = useState(false);
   const [centerMap, setCenterMap] = useState(false);
 
@@ -53,17 +53,17 @@ export default function App() {
     console.log(latitude, longitude)
  },[])
 
- listener.simple_combo("ctrl alt g", function(){
-    setToggleCoords(true)
- })
+//  listener.simple_combo("ctrl alt g", function(){
+//     setToggleCoords(true)
+//  })
 
- listener.simple_combo("ctrl alt c", function(){
-    center = fromLonLat([1.72833, 41.23112])
- })
+//  listener.simple_combo("ctrl alt c", function(){
+//     center = fromLonLat([1.72833, 41.23112])
+//  })
     
   return (
     <>
-      <Keypress></Keypress>
+      
        {toggleCoords ? 
        <Alert key="primary" variant="primary" dismissible>
         <Alert.Heading>

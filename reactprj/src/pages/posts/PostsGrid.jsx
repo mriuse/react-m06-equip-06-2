@@ -9,7 +9,7 @@ const PostsGrid = () => {
   const [ postList, setPostList ] = useState([])
 
   useState(()=>{
-      const postsGuardatsJSON = localStorage.getItem('posts')
+      const postsGuardatsJSON = localStorage.getItem('posts') || "[]"
       const postsGuardats = JSON.parse(postsGuardatsJSON)
       setPostList(postsGuardats)
   })

@@ -1,11 +1,13 @@
 import { Container, Row, Col, Button} from 'react-bootstrap';
-import {useState, useEffect } from 'react';
+import {useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { CommentContext } from './comments/commentContext';
+import CommentsList from './comments/CommentsList';
 
-export default function App() {
+export default function Post() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState({
@@ -24,13 +26,19 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true)
   const storedAuthToken = JSON.parse(localStorage.getItem("authToken")) || '';
 
+  //Inicialització de l'array de comentaris
+  let CommentsJSON = localStorage.getItem('comments') || '[]';
+  let storedComments = JSON.parse(CommentsJSON)
+  const [ Comments, setComments ] = useState(storedComments);
+
+  //Inicialització del post
   useEffect(()=>{
     const postsGuardatsJSON = localStorage.getItem('posts')
     const postsGuardats = JSON.parse(postsGuardatsJSON)
     let postTrobat = postsGuardats.find((post) => post.id === id)
     setPost(postTrobat)
     setIsLoading(false)
-  })
+  },[])
 
   const deletePost = (id) => {
     let postsGuardats = [];
@@ -49,6 +57,7 @@ export default function App() {
 
   return (
     <>
+    <CommentContext.Provider value={{Comments, setComments }}>
       <Card className='px-3 col-md-6 offset-md-3'>
       {isLoading ? (
       <div> ...carregant </div>
@@ -65,7 +74,7 @@ export default function App() {
                 <p>{post.author.name}</p>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Card.Text><p> {post.description} </p></Card.Text>
+                <Card.Text> {post.description} </Card.Text>
               </ListGroup.Item>
               <ListGroup.Item>
                 
@@ -81,6 +90,8 @@ export default function App() {
         </div>
         }
       </Card>
+      <CommentsList id={id}></CommentsList>
+      </CommentContext.Provider>
     </>
   )
 }
