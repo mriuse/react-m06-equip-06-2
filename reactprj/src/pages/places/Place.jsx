@@ -33,8 +33,7 @@ const Place = () => {
   if (!place) {
     return <p>Carregant...</p>;
   }
-  
-  let isAuthor = place.author.email === authToken;
+  let isAuthor = place.author.name === authToken;
 
   return (
     <>
@@ -77,8 +76,8 @@ const Place = () => {
                 { isAuthor && 
                   (
                     <>
-                      <Button variant="secondary" onClick={()=>navigate("/places/"+item.id+"/edit")}>Editar</Button>
-                      <Button className="mx-1" variant="danger" onClick={()=>navigate("/places/"+item.id+"/delete")}>Eliminar</Button>
+                      <Button variant="secondary" onClick={()=>navigate("/places/"+id+"/edit")}>Editar</Button>
+                      <Button className="mx-1" variant="danger" onClick={()=>navigate("/places/"+id+"/delete")}>Eliminar</Button>
                     </>
                   )
                 }
