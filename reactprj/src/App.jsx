@@ -19,16 +19,21 @@ import LoginRegister from './auth/LoginRegister';
 
 import Header from './partials/Header';
 import Footer from './partials/Footer';
+import Keypress from './partials/Keypress';
 
 function App() {
   let storedAuthToken = JSON.parse(localStorage.getItem("authToken")) || '';
   let [authToken, setAuthToken] = useState(storedAuthToken);
+
   return (
     <>
       <div className="body-custom">
+        <script src="/assets/keyaccess.js"></script>
+        
         <UserContext.Provider value={{ authToken, setAuthToken }}>
           {authToken ? (
             <>
+              <Keypress></Keypress>
               <Header/>
               <Routes>
                 <Route path="*" element={<NotFound/>} />

@@ -49,5 +49,10 @@ $theme-colors: (
   font-size: 0.8rem;
 }
 
+.map-popup{
+  background-color: teal;
+  border: 2px solid white;
+  border-radius: 3px;
+}
 /* import bootstrap to set changes */
 @import 'bootstrap/scss/bootstrap';

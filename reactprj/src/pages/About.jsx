@@ -1,22 +1,88 @@
 import { Container, Row, Col, Button} from 'react-bootstrap';
+import React, { useState, useContext, useEffect} from 'react'
 import { RiTwitterLine, RiFacebookCircleLine, RiGithubLine, RiLinkedinLine } from "react-icons/ri";
+import Keypress from '../partials/Keypress';
+
+import Card from 'react-bootstrap/Card';
+import Alert from 'react-bootstrap/Alert';
+
+import { RMap, ROSM, RLayerVector, RFeature, RPopup } from "rlayers";
+import { RStyle, RIcon} from "rlayers/style";
 import { fromLonLat } from "ol/proj";
+import { Point } from "ol/geom";
 import "ol/ol.css";
-import { RMap, ROSM } from "rlayers";
 
 export default function App() {
+  var center = fromLonLat([1.72833, 41.23112])
+  const [point, setPoint] = useState();
   
-const center = fromLonLat([1.72870, 41.23112]);
+  const [latitude, setLatitude] = useState();
+  const [longitude, setLongitude] = useState();
 
+  var listener = new window.keypress.Listener();
+  const [toggleCoords, setToggleCoords] = useState(false);
+  const [centerMap, setCenterMap] = useState(false);
+
+  const locationIcon = "https://static.vecteezy.com/system/resources/thumbnails/010/150/282/small/pin-location-icon-sign-symbol-design-free-png.png"
+  
+  // Es pot fer un watchPosition sense totes les opcions, realment l'unica necessària és la callback, però és molt imprecís i m'enviava a Màlaga.
+  // Pd: Sembla que el navegador afecta, Edge m'encerta millor la posició que Chrome
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  } 
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+
+  function coordenades(position){
+    setLatitude(position.coords.latitude)
+    setLongitude(position.coords.longitude)
+    setPoint(new Point(fromLonLat([position.coords.longitude,position.coords.latitude])))
+  } 
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(coordenades, error, options);
+    } 
+  }
+  
+  useEffect(() => {
+    getLocation();
+    console.log(latitude, longitude)
+ },[])
+
+ listener.simple_combo("ctrl alt g", function(){
+    setToggleCoords(true)
+ })
+
+ listener.simple_combo("ctrl alt c", function(){
+    center = fromLonLat([1.72833, 41.23112])
+ })
+    
   return (
     <>
+      <Keypress></Keypress>
+       {toggleCoords ? 
+       <Alert key="primary" variant="primary" dismissible>
+        <Alert.Heading>
+          Coordenades actuals
+        </Alert.Heading>
+        <p>
+          {latitude}, {longitude}
+        </p>
+       </Alert> : (null) }
       <div className="section-dark">
         <Container className="d-flex justify-content-center align-items-center">
           <Row>
             <Col className="d-flex flex-column align-items-center">
               <h1 className='mb-0'>Contacta'ns</h1>
               <p className='mb-5'>Envia'ns el teu missatge</p>
-              <Button variant="outline-primary" size="lg">Formulari de contacte</Button>
+              {/* A la accesKey he utilitzat la G en comptes de la F perque el navegador té un bind al Alt+F (Windows+Chrome)
+                  Pd: He provat amb Edge i també te un bind al Alt+F
+              */}
+              <Button variant="outline-primary" size="lg" accessKey='g'>Formulari de contacte</Button>
             </Col>
           </Row>
         </Container>
@@ -27,9 +93,31 @@ const center = fromLonLat([1.72870, 41.23112]);
             <Col className="d-flex flex-column align-items-center">
               <h1 className='mb-0'>Vols visitar-nos?</h1>
               <p className='mb-5'>Ubica'ns al mapa</p>
-              <RMap width={"80%"} height={"70vh"} initial={{ center: center, zoom: 18 }}>
+              <RMap width={"100%"} height={"70vh"} initial={{ center: center, zoom: 18 }}>
                 <ROSM />
+                <RLayerVector zIndex={10}>
+                  <RFeature geometry={new Point(center)}>
+                    <RStyle>
+                      <RIcon src={locationIcon} anchor={[0.5, 0.9]} />
+                    </RStyle>
+                  </RFeature>
+                  {!point ? (null) : 
+                  <RFeature geometry={point}>
+                    <RStyle>
+                      <RIcon src={locationIcon} anchor={[0.5, 0.9]} />
+                    </RStyle>
+                    <RPopup trigger={"hover"} className="example-overlay">
+                      <Card>
+                        <Card.Body className="map-popup">
+                          <Card.Title className='text-white'>Vostè està aquí</Card.Title>
+                        </Card.Body>
+                      </Card>
+                    </RPopup>
+                  </RFeature>
+                   } 
+                </RLayerVector>
               </RMap>
+            
             </Col>
         </Container>
       </div>
