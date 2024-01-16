@@ -1,8 +1,9 @@
 import { Row, Col, Button } from 'react-bootstrap';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { stringify } from 'uuid';
 
-const PlaceList = ({item, isAuthor}) => {
+const PlaceList = ({item, isAuthor, deleteSelf, error}) => {
   const navigate = useNavigate();
   
   return (
@@ -29,7 +30,14 @@ const PlaceList = ({item, isAuthor}) => {
             {isAuthor && (
               <>
                 <Button variant="secondary" onClick={()=>navigate("/places/"+item.id+"/edit")}>Editar</Button>
-                <Button variant="danger" onClick={()=>navigate("/places/"+item.id+"/delete")}>Eliminar</Button>
+                <Button variant="danger" onClick={()=>deleteSelf(item.id)}>Eliminar</Button>
+                {error && (
+                  <Row>
+                    <Col>
+                      <p className="text-danger">{error}</p>
+                    </Col>
+                  </Row>
+                )}
               </>
             )}
           </div>

@@ -1,12 +1,29 @@
 import { Container, Row, Col } from 'react-bootstrap';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from "../../userContext";
 import PlaceList from './PlaceList';
 import PlacesMenu from './PlacesMenu'
 
 const PlacesList = () => {
   let { authToken, setAuthToken } = useContext(UserContext);
-  let places = localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : [];
+  let [places, setPlaces] = useState(localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : []);
+
+  let [error, setError] = useState();
+
+  const deleteSelf = (id) => {
+    try{
+      if (places.length === 0){
+        throw new Error("Error: No s'ha trobat el lloc a eliminar.");
+      }
+      const index = places.findIndex((item) => item.id === id);
+      const newPlaces = places.filter((place) => place.id !== id);
+      console.log(JSON.stringify(newPlaces));
+      localStorage.setItem('places', JSON.stringify(newPlaces));
+      setPlaces(newPlaces);
+    } catch (error) {
+      setError(error.message);
+    }
+  }
 
   let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
   const user = users.find(user => user.name === authToken);
@@ -47,7 +64,7 @@ const PlacesList = () => {
               <div key={item.id}>
                 {
                   item.visibility === "public" || isAuthor ? (
-                    <PlaceList key={item.id} item={item} isAuthor={isAuthor} />
+                    <PlaceList key={item.id} item={item} isAuthor={isAuthor} deleteSelf={deleteSelf} />
                   ) : <></>
                 }
               </div>
