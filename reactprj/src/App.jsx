@@ -16,7 +16,7 @@ import PlaceDelete from "./pages/places/PlaceDelete";
 
 import Post from "./pages/posts/Post";
 import PostsList from "./pages/posts/PostsList";
-import PostsGrid from "./pages/posts/posts/PostsGrid";
+import PostsGrid from "./pages/posts/PostsGrid";
 
 import PostAdd from "./pages/posts/PostAdd";
 import PostEdit from "./pages/posts/PostEdit";
