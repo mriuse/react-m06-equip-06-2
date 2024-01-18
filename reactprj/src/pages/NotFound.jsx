@@ -1,5 +1,4 @@
 import { Container, Row, Col, Button} from 'react-bootstrap';
-import { RiTwitterLine, RiFacebookCircleLine, RiGithubLine, RiLinkedinLine } from "react-icons/ri";
 
 
 export default function App() {

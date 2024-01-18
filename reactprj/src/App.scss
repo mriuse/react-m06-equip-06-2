@@ -33,6 +33,22 @@ $theme-colors: (
   }
 }
 
+.img-container, .img-container-lg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-container {
+  width: 200px;
+  height: 200px;
+}
+
+.img-container-lg {
+  width: 75%;
+  height: 400px;
+}
+
 .fullheight{
   height: 100%;
 }

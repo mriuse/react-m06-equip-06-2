@@ -6,13 +6,21 @@ import './App.scss'
 import { UserContext } from "./userContext";
 
 import About from "./pages/About";
-import Places from "./pages/Places";
+
+import PlacesList from "./pages/places/PlacesList";
+import PlacesGrid from "./pages/places/PlacesGrid"; 
+import Place from "./pages/places/Place";
+import PlaceAdd from "./pages/places/PlaceAdd";
+import PlaceEdit from "./pages/places/PlaceEdit";
+import PlaceDelete from "./pages/places/PlaceDelete";
+
 import Post from "./pages/posts/Post";
 import PostsList from "./pages/posts/PostsList";
-import PostsGrid from "./pages/posts/PostsGrid";
+import PostsGrid from "./pages/posts/posts/PostsGrid";
 
 import PostAdd from "./pages/posts/PostAdd";
 import PostEdit from "./pages/posts/PostEdit";
+
 import NotFound from "./pages/NotFound";
 
 import LoginRegister from './auth/LoginRegister';
@@ -43,6 +51,13 @@ function App() {
                 <Route path="/posts" element={ <PostsGrid/> } />
                 <Route path="/post/edit/:id" element={ <PostEdit/> } /> 
                 <Route path="/post/:id" element={ <Post/> } />
+
+                <Route path="/places/list" element={<PlacesList/>} />
+                <Route path="/places/grid" element={<PlacesGrid/>} />
+                  <Route path="/places/add" element={ <PlaceAdd/> } />
+                  <Route path="/places/:id" element={ <Place/> } />
+                    <Route path="/places/:id/edit" element={ <PlaceEdit/> } />
+                    <Route path="/places/:id/delete" element={ <PlaceDelete/> } />
               </Routes>
               <Footer/>
             </>
