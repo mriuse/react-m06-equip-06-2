@@ -8,16 +8,16 @@ const PlacesMenu = () => {
   return (
     <>
       <Row className='mb-5'>
-        <Col>
-            <Link to="/places/add">
-              <Button variant="primary" className='m-1'>+ Afegir lloc nou</Button>
-            </Link>
-            <InputGroup className='m-1'>
-              <Button variant="outline-primary" onClick={() => navigate("/places/list")}>Llista</Button>
-              <Button variant="outline-primary" onClick={() => navigate("/places/grid")}>Graella</Button>
-            </InputGroup>
+        <Col xs={12} md className="d-flex justify-content-start align-items-center">
+          <Link to="/places/add">
+            <Button variant="primary" className='m-1' style={{ minWidth: '150px' }}>+ Afegir lloc nou</Button>
+          </Link>
+          <InputGroup className='m-1'>
+            <Button variant="outline-primary" onClick={() => navigate("/places/list")}>Llista</Button>
+            <Button variant="outline-primary" onClick={() => navigate("/places/grid")}>Graella</Button>
+          </InputGroup>
         </Col>
-        <Col xs={6}>
+        <Col xs={12} md className="text-right">
           <InputGroup className='m-1'>
             <FormControl
               placeholder="Cercar un lloc..."
@@ -29,7 +29,7 @@ const PlacesMenu = () => {
         </Col>
       </Row>
     </>
-  )
+  );
 }
 
 export default PlacesMenu;
