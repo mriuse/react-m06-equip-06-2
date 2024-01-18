@@ -28,9 +28,9 @@ const deletePost = (id) => {
     setPostList(postsGuardats)
 }
   return (
-        <div>
+        <div className='bg-dark-subtle'>
           <PostsMenu/>
-          <div className='d-flex flex-row flex-wrap pt-1'>
+          <div className='d-flex flex-row flex-wrap pt-1 offset-1 col-lg-12'>
             { postList.map( (item )=> { return (
               <>
                 { item.visibility == 'public' || item.author.name == authToken ? (

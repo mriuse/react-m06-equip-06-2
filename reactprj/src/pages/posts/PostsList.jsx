@@ -33,7 +33,7 @@ const PostsList = () => {
   return (
         <div>
           <PostsMenu/>
-          <div className='col-md-9 offset-md-1 px-2 pt-4 overflow-x-auto'>
+          <div className='col-md-9 offset-md-1 px-2 pt-4 overflow-x-auto fullheight'>
             <table>
               <thead>
                 <tr>

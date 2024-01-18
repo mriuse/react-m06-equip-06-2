@@ -58,39 +58,49 @@ export default function Post() {
   return (
     <>
     <CommentContext.Provider value={{Comments, setComments }}>
-      <Card className='px-3 col-md-6 offset-md-3'>
-      {isLoading ? (
-      <div> ...carregant </div>
-      ): <div>
-        <Card.Img variant="top" src={post.upload}></Card.Img>
-        <Card.Body>
-          <Card.Title> {post.name} </Card.Title>
-            <ListGroup variant="flush">
-              <ListGroup.Item className='d-flex flex-row justify-content-between'>
-                <div className='d-flex flex-row'>
-                  <div className='me-4'>{post.latitude} </div>
-                  <div>{post.longitude} </div>
-                </div>
-                <p>{post.author.name}</p>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Card.Text> {post.description} </Card.Text>
-              </ListGroup.Item>
-              <ListGroup.Item>
+          <Card className="d-md-flex flex-column mt-2 col-8 offset-2">
+          <Card.Title className="ps-4 pt-3 bg-primary-dark border rounded-top"> <h2><b>{post.name}</b></h2> </Card.Title>
+          {isLoading ? (
+          <div> ...carregant </div>
+          ): <div className='d-flex flex-row'>
+              <Card.Body className='px-2 col-md-5 '>
+              <Card.Img variant="top" src={post.upload}></Card.Img>
+                  <ListGroup variant="flush">
+                    <ListGroup.Item className='d-flex flex-row flex-wrap justify-content-between bg-dark-subtle border rounded-bottom'>
+                      <div className='d-flex flex-row'>
+                        <div className='me-4'>{post.latitude} </div>
+                        <div>{post.longitude} </div>
+                      </div>
+                      <p>{post.author.name}</p>
+                    </ListGroup.Item>
+                  </ListGroup>
+                    <ListGroup.Item className='ps-3 pt-1'>
+                      
+                      {post.author.name === storedAuthToken ? (
+                        <div className='row pb-3 d-flex flex-wrap'>
+                            <a className='text-primary text-decoration-none px-1 small-text col-md-2' onClick={() => navigate(`/post/edit/${post.id}`)}>Editar</a>
+                            <a className='text-primary text-decoration-none px-1 small-text col-md-2'onClick={() => deletePost(post.id)} >Esborrar</a>
+                        </div>  
+                      ) : null }
+                    </ListGroup.Item>
+
+              </Card.Body>
+              <div>
                 
-                {post.author.name === storedAuthToken ? (
-                  <div className='row pb-3 d-flex flex-wrap'>
-                      <a className='text-primary text-decoration-none px-1 small-text col-md-4' onClick={() => navigate(`/post/edit/${post.id}`)}>Editar</a>
-                      <a className='text-primary text-decoration-none px-1 small-text col-md-4'onClick={() => deletePost(post.id)} >Esborrar</a>
-                  </div>  
-                ) : null }
-              </ListGroup.Item>
-            </ListGroup>
-        </Card.Body>
-        </div>
-        }
-      </Card>
-      <CommentsList id={id}></CommentsList>
+              </div>
+              <div className='px-2 col-md-5'>
+                <ListGroup className='pt-3'>
+                    <ListGroup.Item >
+                      <Card.Text> {post.description} </Card.Text>
+                    </ListGroup.Item>
+                    <ListGroup.Item className='bg-dark-subtle'>
+                      <CommentsList id={id} ></CommentsList>
+                    </ListGroup.Item>                
+                </ListGroup>
+              </div>
+            </div>
+            }
+          </Card>
       </CommentContext.Provider>
     </>
   )

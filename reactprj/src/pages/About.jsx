@@ -1,10 +1,9 @@
-import { Container, Row, Col, Button} from 'react-bootstrap';
+import { Container, Row, Col, Button, ModalDialog, ModalHeader, ModalBody} from 'react-bootstrap';
 import React, { useState, useContext, useEffect} from 'react'
 import { RiTwitterLine, RiFacebookCircleLine, RiGithubLine, RiLinkedinLine } from "react-icons/ri";
-// import Keypress from '../partials/Keypress';
 
 import Card from 'react-bootstrap/Card';
-import Alert from 'react-bootstrap/Alert';
+import Modal from 'react-bootstrap/Modal';
 
 import { RMap, ROSM, RLayerVector, RFeature, RPopup } from "rlayers";
 import { RStyle, RIcon} from "rlayers/style";
@@ -13,15 +12,17 @@ import { Point } from "ol/geom";
 import "ol/ol.css";
 
 export default function App() {
-  var center = fromLonLat([1.72833, 41.23112])
+  const [map, setMap] = useState({
+    center : fromLonLat([1.72833, 41.23112]),
+    zoom : 18
+  })
+  
   const [point, setPoint] = useState();
   
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
 
-  // var listener = new window.keypress.Listener();
-  const [toggleCoords, setToggleCoords] = useState(false);
-  const [centerMap, setCenterMap] = useState(false);
+  var listener = new window.keypress.Listener();
 
   const locationIcon = "https://static.vecteezy.com/system/resources/thumbnails/010/150/282/small/pin-location-icon-sign-symbol-design-free-png.png"
   
@@ -53,26 +54,36 @@ export default function App() {
     console.log(latitude, longitude)
  },[])
 
-//  listener.simple_combo("ctrl alt g", function(){
-//     setToggleCoords(true)
-//  })
+//Listener i lògica del modal de coordenades
+const [show, setShow] = useState(false);
 
-//  listener.simple_combo("ctrl alt c", function(){
-//     center = fromLonLat([1.72833, 41.23112])
-//  })
+const handleClose = () => setShow(false);
+const handleShow = () => setShow(true);
+listener.simple_combo("ctrl alt g",function(){
+  handleShow()
+})
+
+//Listener i lògica de centrar el mapa
+  listener.simple_combo("ctrl alt c", function(){
+      setMap({
+        ...map, 
+        center : fromLonLat([1.72833, 41.23112]),
+      })
+  })
     
   return (
     <>
-      
-       {toggleCoords ? 
-       <Alert key="primary" variant="primary" dismissible>
-        <Alert.Heading>
-          Coordenades actuals
-        </Alert.Heading>
-        <p>
-          {latitude}, {longitude}
-        </p>
-       </Alert> : (null) }
+
+       <Modal show={show} onHide={handleClose}>
+          <ModalHeader closeButton>
+            Coordenades actuals
+          </ModalHeader> 
+          <ModalBody>
+            {latitude}, {longitude}
+          </ModalBody>
+       </Modal>
+
+
       <div className="section-dark">
         <Container className="d-flex justify-content-center align-items-center">
           <Row>
@@ -93,10 +104,10 @@ export default function App() {
             <Col className="d-flex flex-column align-items-center">
               <h1 className='mb-0'>Vols visitar-nos?</h1>
               <p className='mb-5'>Ubica'ns al mapa</p>
-              <RMap width={"100%"} height={"70vh"} initial={{ center: center, zoom: 18 }}>
+              <RMap width={"100%"} height={"70vh"} initial={map}>
                 <ROSM />
                 <RLayerVector zIndex={10}>
-                  <RFeature geometry={new Point(center)}>
+                  <RFeature geometry={new Point(map.center)}>
                     <RStyle>
                       <RIcon src={locationIcon} anchor={[0.5, 0.9]} />
                     </RStyle>

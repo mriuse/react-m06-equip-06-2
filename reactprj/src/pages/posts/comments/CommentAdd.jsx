@@ -61,18 +61,21 @@ const CommentAdd = ({post_id, onCommentAdded}) => {
       }
     })
     //Refresca el component pare
-    navigate(`/post/${post_id}`)
+    onCommentAdded()
   }
 
   return (
-    <form onSubmit={handleSubmit} className='d-flex flex-row px-4 pt-3 col-md-6 offset-md-3'>
-    {/* Comentari */}
-    <label className='d-flex flex-column px-3'>
-      <input type="text" name="comment" onChange={handleInputChange} value={formData.comment} />
-    </label>
+    <div className='col-12'>
+      <form onSubmit={handleSubmit} className='d-flex flex-row justify-content-between flex-md-column flex-wrap '>
+          {/* Comentari */}
+          <label className='d-flex flex-column col-7 col-md-12 pb-3'>
+            <input type="text" name="comment" onChange={handleInputChange} value={formData.comment} />
+          </label>
+          
+          <Button type="submit" variant='outline-primary'> Afegir comentari </Button>
+      </form>
+    </div>
     
-    <Button type="submit" variant='outline-primary'> Afegir comentari </Button>
-  </form>
   )
 }
 

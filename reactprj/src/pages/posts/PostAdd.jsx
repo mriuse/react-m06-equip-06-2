@@ -68,7 +68,7 @@ const PostAdd = () => {
   
    },[])
   return (
-    <form onSubmit={handleSubmit} className='d-flex flex-column px-4 pt-3 col-md-6 offset-md-3'>
+    <form onSubmit={handleSubmit} className='d-flex flex-column justify-content-between px-4 pb-3 col-md-6 offset-md-3 fullheight bg-secondary'>
     
     <label> 
       <input type="hidden" name="id" value={formData.id}/>
