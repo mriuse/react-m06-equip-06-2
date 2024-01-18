@@ -1,7 +1,7 @@
 import { Row, Col, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-const PlaceGrid = ({item, isAuthor}) => {
+const PlaceGrid = ({item, isAuthor, deleteSelf, error}) => {
   const navigate = useNavigate();
   return (
     <>
@@ -27,7 +27,14 @@ const PlaceGrid = ({item, isAuthor}) => {
             {isAuthor && (
               <>
                 <Button variant="secondary" onClick={()=>navigate("/places/"+item.id+"/edit")}>Editar</Button>
-                <Button variant="danger" onClick={()=>navigate("/places/"+item.id+"/delete")}>Eliminar</Button>
+                <Button variant="danger" onClick={()=>deleteSelf(item.id)}>Eliminar</Button>
+                {error && (
+                  <Row>
+                    <Col>
+                      <p className="text-danger">{error}</p>
+                    </Col>
+                  </Row>
+                )}
               </>
             )}
           </div>

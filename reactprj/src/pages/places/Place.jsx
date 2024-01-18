@@ -1,15 +1,15 @@
 import { Container, Row, Col, Button, InputGroup} from 'react-bootstrap';
 import InputGroupText from 'react-bootstrap/esm/InputGroupText';
 import { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, redirect } from 'react-router-dom';
 import { UserContext } from "../../userContext";
 
 const Place = () => {
   let { authToken, setAuthToken } = useContext(UserContext);
   const { id } = useParams();
   const [place, setPlace] = useState(null);
+  let [error, setError] = useState();
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +33,22 @@ const Place = () => {
   if (!place) {
     return <p>Carregant...</p>;
   }
-  let isAuthor = place.author.name === authToken;
+
+  let isAuthor = place.author.name === authToken;  
+
+  const deleteSelf = (id) => {
+    try{
+      const places = JSON.parse(localStorage.getItem('places')) || [];
+      if (places.length === 0){
+        throw new Error("Error: No s'ha trobat el lloc a eliminar.");
+      }
+      const newPlaces = places.filter((place) => place.id !== id);
+      localStorage.setItem('places', JSON.stringify(newPlaces));
+      navigate(-1);
+    } catch (error) {
+      setError(error.message);
+    }
+  }
 
   return (
     <>
@@ -77,7 +92,7 @@ const Place = () => {
                   (
                     <>
                       <Button variant="secondary" onClick={()=>navigate("/places/"+id+"/edit")}>Editar</Button>
-                      <Button className="mx-1" variant="danger" onClick={()=>navigate("/places/"+id+"/delete")}>Eliminar</Button>
+                      <Button className="mx-1" variant="danger" onClick={()=>deleteSelf(id)}>Eliminar</Button>
                     </>
                   )
                 }

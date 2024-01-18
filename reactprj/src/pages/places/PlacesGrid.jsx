@@ -1,5 +1,5 @@
 import { Container, Row, Col } from 'react-bootstrap';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from "../../userContext";
 import PlaceGrid from './PlaceGrid';
 import PlacesMenu from './PlacesMenu'
@@ -10,6 +10,22 @@ const PlacesGrid = () =>  {
   
   let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
   const user = users.find(user => user.name === authToken);
+
+  let [error, setError] = useState();
+
+  const deleteSelf = (id) => {
+    try{
+      if (places.length === 0){
+        throw new Error("Error: No s'ha trobat el lloc a eliminar.");
+      }
+      const newPlaces = places.filter((place) => place.id !== id);
+      console.log(JSON.stringify(newPlaces));
+      localStorage.setItem('places', JSON.stringify(newPlaces));
+      setPlaces(newPlaces);
+    } catch (error) {
+      setError(error.message);
+    }
+  }
 
   return (
     <>
@@ -28,7 +44,7 @@ const PlacesGrid = () =>  {
                 <div key={item.id}>
                   { 
                     item.visibility == "public" || isAuthor ? (
-                      <PlaceGrid key={item.id} item={item} isAuthor={isAuthor}/>
+                      <PlaceGrid key={item.id} item={item} isAuthor={isAuthor} deleteSelf={deleteSelf} error={error}/>
                     ) : <></> 
                   }
                 </div>

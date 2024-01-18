@@ -12,7 +12,6 @@ import PlacesGrid from "./pages/places/PlacesGrid";
 import Place from "./pages/places/Place";
 import PlaceAdd from "./pages/places/PlaceAdd";
 import PlaceEdit from "./pages/places/PlaceEdit";
-import PlaceDelete from "./pages/places/PlaceDelete";
 
 import Post from "./pages/posts/Post";
 import PostsList from "./pages/posts/PostsList";
@@ -57,7 +56,6 @@ function App() {
                   <Route path="/places/add" element={ <PlaceAdd/> } />
                   <Route path="/places/:id" element={ <Place/> } />
                     <Route path="/places/:id/edit" element={ <PlaceEdit/> } />
-                    <Route path="/places/:id/delete" element={ <PlaceDelete/> } />
               </Routes>
               <Footer/>
             </>

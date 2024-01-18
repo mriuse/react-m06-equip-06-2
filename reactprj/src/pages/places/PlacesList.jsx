@@ -15,7 +15,6 @@ const PlacesList = () => {
       if (places.length === 0){
         throw new Error("Error: No s'ha trobat el lloc a eliminar.");
       }
-      const index = places.findIndex((item) => item.id === id);
       const newPlaces = places.filter((place) => place.id !== id);
       console.log(JSON.stringify(newPlaces));
       localStorage.setItem('places', JSON.stringify(newPlaces));
