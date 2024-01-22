@@ -9,7 +9,7 @@ const PostsList = () => {
   const [ posts, setPosts ] = useState([])
 
   useState(()=>{
-      const postsGuardatsJSON = localStorage.getItem('posts')
+      const postsGuardatsJSON = localStorage.getItem('posts') || [];
       const postsGuardats = JSON.parse(postsGuardatsJSON)
       setPosts(postsGuardats)
   })

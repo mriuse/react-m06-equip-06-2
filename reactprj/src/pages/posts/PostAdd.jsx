@@ -1,10 +1,12 @@
 import React, { useState, useContext, useEffect} from 'react'
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../userContext';
 import { Button } from 'react-bootstrap'
 import { v4 as uuidv4 } from 'uuid'
 
 const PostAdd = () => {
   let { authToken, setAuthToken } = useContext(UserContext);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     id: uuidv4(), 
     name: '',
@@ -16,7 +18,11 @@ const PostAdd = () => {
     author: {
       name: authToken,
       email: '', 
-    }
+    },
+    favorites:[{
+      id: '',
+      user:'',
+    }]
   })
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -51,6 +57,7 @@ const PostAdd = () => {
       upload: '',
       visibility: 'public'
     })
+    navigate("/posts")
   }
 
   useEffect( ()=> {

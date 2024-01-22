@@ -1,13 +1,13 @@
-import { Container, Row, Col, Button} from 'react-bootstrap';
 import {useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { CommentContext } from './comments/commentContext';
+import { UserContext } from '../../userContext';
 import CommentsList from './comments/CommentsList';
 
 export default function Post() {
+  let {authToken, setAuthToken} = useContext(UserContext)
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState({
@@ -21,7 +21,11 @@ export default function Post() {
     author: {
       name: '',
       email: '', 
-    }
+    },
+    favorites: [{
+      id: '',
+      user: ''
+    }]
   })
   const [isLoading, setIsLoading] = useState(true)
   const storedAuthToken = JSON.parse(localStorage.getItem("authToken")) || '';
@@ -38,7 +42,19 @@ export default function Post() {
     let postTrobat = postsGuardats.find((post) => post.id === id)
     setPost(postTrobat)
     setIsLoading(false)
-  },[])
+  },[isLoading])
+  
+
+  const deletePostComments = (id) => {
+    let comentarisGuardats = [];
+    // Trec l'array de comments de localstorage
+    const comentarisGuardatsJSON = localStorage.getItem('comments')
+    comentarisGuardats = comentarisGuardatsJSON ? JSON.parse(comentarisGuardatsJSON) : []
+    // Filtro els comments que no són del post esborrat
+    comentarisGuardats = comentarisGuardats.filter(comment => comment.id_post !== id)
+    // Torno a guardar l'array a localstorage
+    localStorage.setItem('comments', JSON.stringify(comentarisGuardats))
+  }
 
   const deletePost = (id) => {
     let postsGuardats = [];
@@ -51,9 +67,37 @@ export default function Post() {
     postsGuardats.splice(postKey, 1)
     // Torno a guardar l'array a localstorage
     localStorage.setItem('posts', JSON.stringify(postsGuardats))
+
+    //Ara esborro els comentaris que hi havia al post
+    deletePostComments(id)
     // Com que ara tinc una pagina buida, torno a posts
     navigate('/posts')
-}
+  }
+  const onCommentAdded=()=>{
+    setIsLoading(true)
+  }
+
+  const [isFav, setIsFav] = useState(false)
+  {post.favorites.find((fav)=>fav.user === authToken)? setIsFav(true) : (null)}
+
+  const handleFavs=()=>{
+    // if(isFav){
+    //   let otherFavs = post.favorites.filter((fav)=>fav.user!==authToken)
+    //   setPost({
+    //     ...post,
+    //     favorites: otherFavs
+    // })
+    //   setIsFav(false)
+    // }
+    // else{
+    //   let newFavs = [...post.favorites, {id:post.id, user:authToken}]
+    //   setPost({
+    //     ...post,
+    //     favorites: newFavs
+    //   })
+    //   setIsFav(true)
+    // }
+  }
 
   return (
     <>
@@ -72,6 +116,14 @@ export default function Post() {
                         <div>{post.longitude} </div>
                       </div>
                       <p>{post.author.name}</p>
+                      <div onClick={()=>handleFavs()}>
+                        {isFav ?
+                        <p>Liked</p>
+                        :
+                        <p>Not liked</p>
+                        }
+                      </div>
+                      
                     </ListGroup.Item>
                   </ListGroup>
                     <ListGroup.Item className='ps-3 pt-1'>
@@ -94,12 +146,12 @@ export default function Post() {
                       <Card.Text> {post.description} </Card.Text>
                     </ListGroup.Item>
                     <ListGroup.Item className='bg-dark-subtle'>
-                      <CommentsList id={id} ></CommentsList>
+                      <CommentsList id={id} onCommentAdded={()=>onCommentAdded()} ></CommentsList>
                     </ListGroup.Item>                
                 </ListGroup>
               </div>
             </div>
-            }
+            } 
           </Card>
       </CommentContext.Provider>
     </>
