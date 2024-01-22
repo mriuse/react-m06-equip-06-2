@@ -1,14 +1,17 @@
 import { Container, Row, Col, Button, InputGroup} from 'react-bootstrap';
 import InputGroupText from 'react-bootstrap/esm/InputGroupText';
 import { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate, redirect } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { UserContext } from "../../userContext";
+import { ReviewContext } from './reviews/reviewContext';
+import ReviewList from './reviews/ReviewList';
 
 const Place = () => {
   let { authToken, setAuthToken } = useContext(UserContext);
   const { id } = useParams();
   const [place, setPlace] = useState(null);
   let [error, setError] = useState();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,8 +78,11 @@ const Place = () => {
                 </InputGroup>
                 <InputGroup className='d-flex justify-content-end'>
                   <InputGroupText>0</InputGroupText>
-                  <Button variant="secondary">Fer ressenya</Button>
+                  <Button variant="secondary">Ressenyes</Button>
                 </InputGroup>
+            </Col>
+            <Col>
+              <hr></hr>
             </Col>
           </Row>
           <Row className='d-flex flex-column'>
@@ -85,6 +91,16 @@ const Place = () => {
               <p><b>Latitud: </b>{place.latitude}<b> - Longitud: </b>{place.longitude}</p>
               <h5>Descripció</h5>
               <p>{place.description}</p>
+            </Col>
+            <Col>
+              <hr></hr>
+            </Col>
+            <Col className="mb-4">
+              <h5>Ressenyes</h5>
+              <ReviewList/>
+            </Col>
+            <Col>
+              <hr></hr>
             </Col>
             <Col className="d-flex flex-row justify-content-between">
               <Col>

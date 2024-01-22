@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from "../../userContext";
 
 const PlaceEdit = () => {
