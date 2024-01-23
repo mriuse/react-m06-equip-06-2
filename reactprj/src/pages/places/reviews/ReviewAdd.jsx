@@ -4,14 +4,13 @@ import { v4 as uuidv4 } from 'uuid'
 import { UserContext } from '../../../userContext';
 import { Col, Button } from 'react-bootstrap'
 
-const ReviewAdd = ({place_id, onCommentAdded}) => {
+const ReviewAdd = ({place_id, handleReviewAdded}) => {
   const navigate = useNavigate()
-
   const {authToken, setAuthToken} = useContext(UserContext)
   let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
   const user = users.find(user => user.name === authToken);
 
-  const currentDate = new Date()
+  const currentDate = new Date();
 
   const [formData, setFormData] = useState({
     id: uuidv4(), 
@@ -35,11 +34,12 @@ const ReviewAdd = ({place_id, onCommentAdded}) => {
   const handleSubmit = (e) => {
     e.preventDefault();    
 
-    let reviewList = localStorage.getItem('reviews') ? JSON.parse(localStorage.getItem('reviews')) : []
+    let reviewList = localStorage.getItem('reviews') ? JSON.parse(localStorage.getItem('reviews')) : [];
 
-    let newReview = formData
-    reviewList.push(newReview)
-    localStorage.setItem("reviews", JSON.stringify(reviewList))
+    let newReview = formData;
+    reviewList.push(newReview); 
+    
+    localStorage.setItem("reviews", JSON.stringify(reviewList));
 
     setFormData({
       ...formData,

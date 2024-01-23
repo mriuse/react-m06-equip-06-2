@@ -8,8 +8,10 @@ import ReviewList from './reviews/ReviewList';
 
 const Place = () => {
   let { authToken, setAuthToken } = useContext(UserContext);
+
   const { id } = useParams();
   const [place, setPlace] = useState(null);
+  const [reviewCount, setReviewCount] = useState(0);
   let [error, setError] = useState();
 
   const navigate = useNavigate();
@@ -30,7 +32,18 @@ const Place = () => {
       }
     };
 
+    const fetchReviews = async () => {
+      try {
+        const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+        const placeReviews = reviews.filter(review => review.id_ref === id);
+        setReviewCount(placeReviews.length);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+
     fetchData();
+    fetchReviews();
   }, [id]);
 
   if (!place) {
@@ -75,7 +88,7 @@ const Place = () => {
               <Button variant="secondary">+Favorit</Button>
               <InputGroup className='d-flex justify-content-end'>
                 <InputGroupText>0 favs</InputGroupText>
-                <InputGroupText>0 ressenyes</InputGroupText>
+                <InputGroupText>{reviewCount} ressenyes</InputGroupText>
               </InputGroup>
             </Col>
             <Col>
@@ -94,7 +107,7 @@ const Place = () => {
             </Col>
             <Col >
               <h5 className='mb-4'>Ressenyes</h5>
-              <ReviewList/>
+              <ReviewList id={id}/>
             </Col>
             <Col className="my-4">
               <hr></hr>
