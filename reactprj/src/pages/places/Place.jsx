@@ -72,34 +72,31 @@ const Place = () => {
               <p><i>{place.date}</i></p>
             </Col>
             <Col className="d-flex justify-content-between">
-                <InputGroup>
-                  <InputGroupText>0</InputGroupText>
-                  <Button variant="secondary">Like</Button>
-                </InputGroup>
-                <InputGroup className='d-flex justify-content-end'>
-                  <InputGroupText>0</InputGroupText>
-                  <Button variant="secondary">Ressenyes</Button>
-                </InputGroup>
+              <Button variant="secondary">+Favorit</Button>
+              <InputGroup className='d-flex justify-content-end'>
+                <InputGroupText>0 favs</InputGroupText>
+                <InputGroupText>0 ressenyes</InputGroupText>
+              </InputGroup>
             </Col>
             <Col>
               <hr></hr>
             </Col>
           </Row>
           <Row className='d-flex flex-column'>
-            <Col className='mb-4'>
-              <h5>Coordenades</h5>
-              <p><b>Latitud: </b>{place.latitude}<b> - Longitud: </b>{place.longitude}</p>
-              <h5>Descripció</h5>
+            <Col>
+              <h5 className='mb-2'>Coordenades</h5>
+              <p><b>Latitud: </b>{place.latitude}<br></br><b>Longitud: </b>{place.longitude}</p>
+              <h5 className='mb-2'>Descripció</h5>
               <p>{place.description}</p>
             </Col>
-            <Col>
+            <Col className="my-4">
               <hr></hr>
             </Col>
-            <Col className="mb-4">
-              <h5>Ressenyes</h5>
+            <Col >
+              <h5 className='mb-4'>Ressenyes</h5>
               <ReviewList/>
             </Col>
-            <Col>
+            <Col className="my-4">
               <hr></hr>
             </Col>
             <Col className="d-flex flex-row justify-content-between">

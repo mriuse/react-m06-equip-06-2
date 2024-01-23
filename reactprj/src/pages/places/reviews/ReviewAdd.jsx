@@ -1,9 +1,8 @@
 import React, {useState, useContext, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
-
 import { v4 as uuidv4 } from 'uuid'
 import { UserContext } from '../../../userContext';
-import { Button } from 'react-bootstrap'
+import { Col, Button } from 'react-bootstrap'
 
 const ReviewAdd = ({place_id, onCommentAdded}) => {
   const navigate = useNavigate()
@@ -58,15 +57,14 @@ const ReviewAdd = ({place_id, onCommentAdded}) => {
   }
 
   return (
-    <div className='col-12'>
+    <Col className='mb-4'>
       <form onSubmit={handleSubmit} className='d-flex flex-row justify-content-between flex-md-column flex-wrap '>
         <label className='d-flex flex-column col-7 col-md-12 pb-3'>
-          <input type="text" name="review" onChange={handleInputChange} value={formData.review} />
+          <textarea name="review" onChange={handleInputChange} value={formData.review} />
         </label>
-        
-        <Button type="submit" variant='outline-primary'>Afegir ressenya</Button>
+        <Button type="submit" variant='primary'>Afegir ressenya</Button>
       </form>
-    </div>
+    </Col>
     
   )
 }

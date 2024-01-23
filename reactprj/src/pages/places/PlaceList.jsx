@@ -5,7 +5,7 @@ import { stringify } from 'uuid';
 
 const PlaceList = ({item, isAuthor, deleteSelf, error}) => {
   const navigate = useNavigate();
-  
+  console.log(item)
   return (
     <>
       <Row className='mb-3 mb-lg-0'>

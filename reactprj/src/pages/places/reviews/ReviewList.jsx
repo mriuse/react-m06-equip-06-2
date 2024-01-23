@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react'
-
+import { Col } from 'react-bootstrap';
 import Review from './Review';
 import ReviewAdd from './ReviewAdd';
 
@@ -24,17 +24,18 @@ const ReviewList = ({id}) => {
     const handleReviewAdded = () => {
         reviews = localStorage.getItem('reviews') ? JSON.parse(localStorage.getItem('reviews')) : [];
     }
+
+    
     
 return (
-    <div className='d-flex flex-col flex-wrap pt-1'>
+    <Col className='d-flex flex-column w-100'>
       {!hasReviewed || !reviews ? (
         <ReviewAdd post_id={id} onReviewAdded={handleReviewAdded}></ReviewAdd>
       ) : null}
-
-        {postReviews.map((item) => item.id_ref === id ? (
-            <Review key={item.id} item={item}/>) : null
+      {postReviews.map((item) => item.id_ref === id ? (
+        <Review key={item.id} item={item}/>) : null
       )}
-    </div>
+    </Col>
   );
 };
 
