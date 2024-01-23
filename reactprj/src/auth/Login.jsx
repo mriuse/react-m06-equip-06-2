@@ -1,11 +1,13 @@
 import { useState, useContext } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { UserContext } from '../userContext';
+import { useForm } from "react-hook-form";
 
 const Login = ({ toggleLogin }) => {
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
   let [error, setError] = useState({});
+  const { register, handleSubmit } = useForm();
 
   let { authToken, setAuthToken } = useContext(UserContext);
 
@@ -35,22 +37,23 @@ const Login = ({ toggleLogin }) => {
             <Form.Group className="mb-3" controlId="name">
               <Form.Label>Nom d'usuari:</Form.Label>
               <Form.Control
-              name="name" 
               type="text"
+              /*name="name" 
               onChange={(e) => {
                 setName(e.target.value);
-              }}
-            />
+              }}*/
+              />
             </Form.Group>
             <Form.Group className="mb-3" controlId="password">
               <Form.Label>Password:</Form.Label>
-              <Form.Control 
-              name="password"
+              <Form.Control
               type="password"
+              /*name="password"
               onChange={(e) => {
                 setPassword(e.target.value);
-              }}
-            />
+              }}*/
+
+              />
             </Form.Group>
             {error && error.message && (
               <div className="mb-3">
