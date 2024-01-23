@@ -81,12 +81,10 @@ const Place = () => {
       );
   
       if (isAlreadyFavorited) {
-        // Unfavorite
         favorites = favorites.filter(
           favorite => !(favorite.id_ref === id && favorite.user.name === user.name)
         );
       } else {
-        // Favorite
         favorites.push({
           id: uuidv4(),
           id_ref: id,
@@ -96,7 +94,7 @@ const Place = () => {
           },
         });
       }
-      
+
       localStorage.setItem('favorites', JSON.stringify(favorites));
       setFavoriteCount(favorites.length);
       setIsFavorited(!isAlreadyFavorited);
@@ -139,7 +137,7 @@ const Place = () => {
               <p><i>{place.date}</i></p>
             </Col>
             <Col className="d-flex justify-content-between">
-              <Button variant="secondary" onClick={toggleFavorite}>
+              <Button variant="primary" onClick={toggleFavorite}>
                 {isFavorited ? '-Favorit' : '+Favorit'}
               </Button>
               <InputGroup className='d-flex justify-content-end'>
@@ -163,7 +161,7 @@ const Place = () => {
             </Col>
             <Col >
               <h5 className='mb-4'>Ressenyes</h5>
-              <ReviewList id={id}/>
+              <ReviewList id={id} updateReviewCount={setReviewCount}/>
             </Col>
             <Col className="my-4">
               <hr></hr>
