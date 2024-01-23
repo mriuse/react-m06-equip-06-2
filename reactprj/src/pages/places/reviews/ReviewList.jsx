@@ -24,9 +24,7 @@ const ReviewList = ({id}) => {
     const handleReviewAdded = () => {
       reviews = localStorage.getItem('reviews') ? JSON.parse(localStorage.getItem('reviews')) : [];
     }
-
     
-    console.log(id)
 return (
     <Col className='d-flex flex-column w-100'>
       {!hasReviewed || !reviews ? (

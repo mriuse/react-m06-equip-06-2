@@ -2,8 +2,6 @@ import React from 'react';
 import { ListGroup, Image, Col, Row } from 'react-bootstrap';
 
 const Review = (item) => {
-  console.log(item.item.user);
-
   return (
     <ListGroup className='pb-3'>
       <Row className='align-items-start'>

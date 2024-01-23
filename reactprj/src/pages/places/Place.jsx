@@ -5,14 +5,22 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { UserContext } from "../../userContext";
 import { ReviewContext } from './reviews/reviewContext';
 import ReviewList from './reviews/ReviewList';
+import { v4 as uuidv4 } from 'uuid'
 
 const Place = () => {
   let { authToken, setAuthToken } = useContext(UserContext);
 
   const { id } = useParams();
+  
   const [place, setPlace] = useState(null);
   const [reviewCount, setReviewCount] = useState(0);
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [favoriteCount, setFavoriteCount] = useState(0);
+
   let [error, setError] = useState();
+
+  let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
+  const user = users.find(user => user.name === authToken);
 
   const navigate = useNavigate();
 
@@ -31,7 +39,18 @@ const Place = () => {
         console.error('Error fetching place data:', error);
       }
     };
-
+    const fetchFavorites = async () => {
+      try {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const placeFavorites = favorites.filter(favorite => favorite.id_ref === id);
+        const isPlaceFavorited = placeFavorites.some(favorite => favorite.user.name === user.name);
+        setIsFavorited(isPlaceFavorited);
+        console.log(isPlaceFavorited)
+        setFavoriteCount(placeFavorites.length);
+      } catch (error) {
+        console.error('Error fetching favorites:', error);
+      }
+    }
     const fetchReviews = async () => {
       try {
         const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
@@ -43,14 +62,49 @@ const Place = () => {
     };
 
     fetchData();
+    fetchFavorites();
     fetchReviews();
-  }, [id]);
+  }, [id, user.name]);
 
   if (!place) {
     return <p>Carregant...</p>;
   }
 
-  let isAuthor = place.author.name === authToken;  
+  let isAuthor = place.author.name === user.name;
+
+  const toggleFavorite = () => {
+    try {
+      let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  
+      const isAlreadyFavorited = favorites.some(
+        favorite => favorite.id_ref === id && favorite.user.name === user.name
+      );
+  
+      if (isAlreadyFavorited) {
+        // Unfavorite
+        favorites = favorites.filter(
+          favorite => !(favorite.id_ref === id && favorite.user.name === user.name)
+        );
+      } else {
+        // Favorite
+        favorites.push({
+          id: uuidv4(),
+          id_ref: id,
+          user: {
+            name: user.name,
+            email: user.email,
+          },
+        });
+      }
+      
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      setFavoriteCount(favorites.length);
+      setIsFavorited(!isAlreadyFavorited);
+    } catch (error) {
+      console.error('Error updating favorites:', error);
+    }
+  };
+  
 
   const deleteSelf = (id) => {
     try{
@@ -85,9 +139,11 @@ const Place = () => {
               <p><i>{place.date}</i></p>
             </Col>
             <Col className="d-flex justify-content-between">
-              <Button variant="secondary">+Favorit</Button>
+              <Button variant="secondary" onClick={toggleFavorite}>
+                {isFavorited ? '-Favorit' : '+Favorit'}
+              </Button>
               <InputGroup className='d-flex justify-content-end'>
-                <InputGroupText>0 favs</InputGroupText>
+                <InputGroupText>{favoriteCount} favs</InputGroupText>
                 <InputGroupText>{reviewCount} ressenyes</InputGroupText>
               </InputGroup>
             </Col>
