@@ -58,8 +58,8 @@ const ReviewAdd = ({place_id, onCommentAdded}) => {
 
   return (
     <Col className='mb-4'>
-      <form onSubmit={handleSubmit} className='d-flex flex-row justify-content-between flex-md-column flex-wrap '>
-        <label className='d-flex flex-column col-7 col-md-12 pb-3'>
+      <form onSubmit={handleSubmit} className='d-flex flex-column justify-content-between'>
+        <label className='d-flex flex-column pb-3'>
           <textarea name="review" onChange={handleInputChange} value={formData.review} />
         </label>
         <Button type="submit" variant='primary'>Afegir ressenya</Button>
