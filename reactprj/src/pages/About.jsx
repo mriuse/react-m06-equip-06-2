@@ -12,6 +12,7 @@ import { Point } from "ol/geom";
 import "ol/ol.css";
 
 export default function App() {
+  var [mapRefresh, setMapRefresh] = useState(false)
   const [map, setMap] = useState({
     center : fromLonLat([1.72833, 41.23112]),
     zoom : 18
@@ -65,10 +66,7 @@ listener.simple_combo("ctrl alt g",function(){
 
 //Listener i lògica de centrar el mapa
   listener.simple_combo("ctrl alt c", function(){
-      setMap({
-        ...map, 
-        center : fromLonLat([1.72833, 41.23112]),
-      })
+      setMapRefresh(false)
   })
     
   return (
@@ -104,31 +102,32 @@ listener.simple_combo("ctrl alt g",function(){
             <Col className="d-flex flex-column align-items-center">
               <h1 className='mb-0'>Vols visitar-nos?</h1>
               <p className='mb-5'>Ubica'ns al mapa</p>
-              <RMap width={"100%"} height={"70vh"} initial={map}>
-                <ROSM />
-                <RLayerVector zIndex={10}>
-                  <RFeature geometry={new Point(map.center)}>
-                    <RStyle>
-                      <RIcon src={locationIcon} anchor={[0.5, 0.9]} />
-                    </RStyle>
-                  </RFeature>
-                  {!point ? (null) : 
-                  <RFeature geometry={point}>
-                    <RStyle>
-                      <RIcon src={locationIcon} anchor={[0.5, 0.9]} />
-                    </RStyle>
-                    <RPopup trigger={"hover"} className="example-overlay">
-                      <Card>
-                        <Card.Body className="map-popup">
-                          <Card.Title className='text-white'>Vostè està aquí</Card.Title>
-                        </Card.Body>
-                      </Card>
-                    </RPopup>
-                  </RFeature>
-                   } 
-                </RLayerVector>
-              </RMap>
-            
+              {!mapRefresh ? setMapRefresh(true) : 
+                <RMap width={"100%"} height={"70vh"} initial={map}>
+                  <ROSM />
+                  <RLayerVector zIndex={10}>
+                    <RFeature geometry={new Point(map.center)}>
+                      <RStyle>
+                        <RIcon src={locationIcon} anchor={[0.5, 0.9]} />
+                      </RStyle>
+                    </RFeature>
+                    {!point ? (null) : 
+                    <RFeature geometry={point}>
+                      <RStyle>
+                        <RIcon src={locationIcon} anchor={[0.5, 0.9]} />
+                      </RStyle>
+                      <RPopup trigger={"hover"} className="example-overlay">
+                        <Card>
+                          <Card.Body className="map-popup">
+                            <Card.Title className='text-white'>Vostè està aquí</Card.Title>
+                          </Card.Body>
+                        </Card>
+                      </RPopup>
+                    </RFeature>
+                    } 
+                  </RLayerVector>
+                </RMap>
+              }
             </Col>
         </Container>
       </div>

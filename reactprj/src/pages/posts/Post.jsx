@@ -10,6 +10,7 @@ export default function Post() {
   let {authToken, setAuthToken} = useContext(UserContext)
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isFav, setIsFav] = useState(false)
   const [post, setPost] = useState({
     id: '', 
     name: '',
@@ -42,6 +43,8 @@ export default function Post() {
     let postTrobat = postsGuardats.find((post) => post.id === id)
     setPost(postTrobat)
     setIsLoading(false)
+    
+    {post.favorites.filter((fav)=>fav.user === authToken)? setIsFav(true) : (null)}
   },[isLoading])
   
 
@@ -77,26 +80,26 @@ export default function Post() {
     setIsLoading(true)
   }
 
-  const [isFav, setIsFav] = useState(false)
-  {post.favorites.find((fav)=>fav.user === authToken)? setIsFav(true) : (null)}
-
   const handleFavs=()=>{
-    // if(isFav){
-    //   let otherFavs = post.favorites.filter((fav)=>fav.user!==authToken)
-    //   setPost({
-    //     ...post,
-    //     favorites: otherFavs
-    // })
-    //   setIsFav(false)
-    // }
-    // else{
-    //   let newFavs = [...post.favorites, {id:post.id, user:authToken}]
-    //   setPost({
-    //     ...post,
-    //     favorites: newFavs
-    //   })
-    //   setIsFav(true)
-    // }
+    if(isFav){
+      let otherFavs = post.favorites.filter((fav)=>fav.user!==authToken)
+      console.log(otherFavs)
+      setPost({
+        ...post,
+        favorites: otherFavs
+      })
+      setIsFav(false)
+    }
+    else{
+      let newFav = {id:post.id, user:authToken}
+      let someFavs = [...post.favorites, newFav]
+      setPost({
+        ...post,
+        favorites: {someFavs}
+      })
+
+      setIsFav(true)
+    }
   }
 
   return (
@@ -116,7 +119,8 @@ export default function Post() {
                         <div>{post.longitude} </div>
                       </div>
                       <p>{post.author.name}</p>
-                      <div onClick={()=>handleFavs()}>
+                      
+                      <div className='row' onClick={()=>handleFavs()}>
                         {isFav ?
                         <p>Liked</p>
                         :
