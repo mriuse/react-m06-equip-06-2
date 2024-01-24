@@ -4,55 +4,30 @@ import { UserContext } from '../userContext';
 import { useForm } from "react-hook-form";
 
 const Login = ({ toggleLogin }) => {
-  let [name, setName] = useState("");
-  let [password, setPassword] = useState("");
-  let [error, setError] = useState({});
   const { register, handleSubmit } = useForm();
 
-  let { authToken, setAuthToken } = useContext(UserContext);
-
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-
-  let sendLogin = (e) => {
-    e.preventDefault();
-    const checkUser = users.some(
-      user => user.name === name && user.password === password
-    );
-
-    if(checkUser){
-      setAuthToken(name);
-      console.log("User login: " + name)
-      localStorage.setItem ("authToken",JSON.stringify(name));
-    }else{
-      setError({ message: "Invalid login credentials!" });
-    }
-    
-  }
+  const { setAuthToken } = useContext(UserContext);
+  const [error, setError] = useState({});
+  
+  const sendLogin = (data) => {
+    console.log(data);
+  };
 
   return (
     <>
       <Row className="border border-primary border-2 p-3 rounded">
         <Col lg={6} md={8} sm={10} xs={12} className="container-md">
-          <Form action="login">
+          <Form onSubmit={handleSubmit(sendLogin)}>
             <Form.Group className="mb-3" controlId="name">
               <Form.Label>Nom d'usuari:</Form.Label>
-              <Form.Control
-              type="text"
-              /*name="name" 
-              onChange={(e) => {
-                setName(e.target.value);
-              }}*/
-              />
+              <Form.Control 
+              type="text" 
+              {...register("name")}/>
             </Form.Group>
             <Form.Group className="mb-3" controlId="password">
-              <Form.Label>Password:</Form.Label>
-              <Form.Control
-              type="password"
-              /*name="password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}*/
-
+              <Form.Label>Contrasenya:</Form.Label>
+              <Form.Control type="password"
+              {...register("password")}
               />
             </Form.Group>
             {error && error.message && (
@@ -61,25 +36,20 @@ const Login = ({ toggleLogin }) => {
               </div>
             )}
             <div className="mb-3">
-              <Button 
-                variant="primary"
-                onClick={(e) => {
-                  sendLogin(e);
-                }}
-              >Login</Button>
+              <Button variant="primary" type="submit">
+                Entrar
+              </Button>
             </div>
           </Form>
         </Col>
       </Row>
       <Row className="mt-3">
         <Col>
-          <Button
-            className='btn btn-primary'
-            onClick={() => {
-              toggleLogin(false);
-            }}
-          >
-            Not registered? Register here
+          <Button className='btn btn-primary'
+          onClick={() => {
+            toggleLogin(false)
+          }}>
+            No tens compte? Registra't
           </Button>
         </Col>
       </Row>
