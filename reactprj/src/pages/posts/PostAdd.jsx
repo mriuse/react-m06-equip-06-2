@@ -1,153 +1,132 @@
-import React, { useState, useContext, useEffect} from 'react'
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../userContext';
-import { Button } from 'react-bootstrap'
-import { v4 as uuidv4 } from 'uuid'
+import { Button, Container, Row, Col, Form } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 
 const PostAdd = () => {
-  let { authToken, setAuthToken } = useContext(UserContext);
+  const { authToken } = useContext(UserContext);
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    id: uuidv4(), 
-    name: '',
-    description: '',
-    upload: '',
-    latitude: '',
-    longitude: '',
-    visibility: 'public',
-    author: {
-      name: authToken,
-      email: '', 
-    },
-    favorites:[{
-      id: '',
-      user:'',
-    }]
-  })
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
-  }
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let postsGuardats = [];
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+  let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
+  const user = users.find(user => user.name === authToken);
 
-    if(localStorage.getItem('posts')){
-      //Recull l'item posts i el transforma des d'un json a un array
-      const postsGuardatsJSON = localStorage.getItem('posts')
-      postsGuardats = postsGuardatsJSON ? JSON.parse(postsGuardatsJSON) : []
-    }
+  const onSubmit = (data) => {
+    let postsGuardats = localStorage.getItem('posts') ? JSON.parse(localStorage.getItem('posts')) : [];
 
-    //Creem el nou objecte post i el guardem a localstorage
-    let newPost = formData
+    // Creem el nou objecte post
+    let newPost = {
+      id: uuidv4(),
+      name: data.name,
+      description: data.description,
+      upload: data.upload,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      visibility: data.visibility,
+      author: {
+        name: user.name,
+        email: user.email,
+      },
+      favorites: [{
+        id: '',
+        user: ''
+      }]
+    };
 
-    postsGuardats.push(newPost)
-
-    localStorage.setItem("posts", JSON.stringify(postsGuardats))
+    postsGuardats.push(newPost);
+    localStorage.setItem('posts', JSON.stringify(postsGuardats));
 
     // Neteja el formulari
-    setFormData({
-      ...formData,
-      id: uuidv4(), 
-      name: '',
-      description: '',
-      upload: '',
-      visibility: 'public'
-    })
-    navigate("/posts")
-  }
+    setValue('name', '');
+    setValue('description', '');
+    setValue('upload', '');
+    setValue('latitude', '');
+    setValue('longitude', '');
+    setValue('visibility', 'public');
 
-  useEffect( ()=> {
-    navigator.geolocation.getCurrentPosition( (pos )=> {
-      setFormData({
-        ...formData,
-        latitude :  pos.coords.latitude,
-        longitude: pos.coords.longitude
-   
-      })
-      // console.log("Latitude is :", pos.coords.latitude);
-      // console.log("Longitude is :", pos.coords.longitude);
+    navigate('/posts');
+  };
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setValue('latitude', pos.coords.latitude);
+      setValue('longitude', pos.coords.longitude);
     });
-  
-  
-   },[])
+  }, [setValue]);
+
   return (
-    <form onSubmit={handleSubmit} className='d-flex flex-column justify-content-between px-4 pb-3 col-md-6 offset-md-3 fullheight bg-secondary'>
-    
-    <label> 
-      <input type="hidden" name="id" value={formData.id}/>
-    </label>
+    <Form onSubmit={handleSubmit(onSubmit)} className='d-flex flex-column justify-content-between px-4 pb-3 col-md-6 offset-md-3 fullheight bg-secondary'>
+      <Form.Group controlId="id">
+        <Form.Control type="hidden" {...register('id')} />
+      </Form.Group>
 
-    <label className='d-flex flex-column'>
-      Nom:
-      <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
-    </label>
+      <Form.Group controlId="name" className='d-flex flex-column'>
+        <Form.Label>Nom:</Form.Label>
+        <Form.Control type="text" {...register('name', { required: 'Aquest camp és obligatori' })} />
+        {errors.name && <p className="text-danger">{errors.name.message}</p>}
+      </Form.Group>
 
-    <label className='d-flex flex-column'>
-      Descripció:
-      <textarea name="description" value={formData.description} onChange={handleInputChange} />
-    </label>
+      <Form.Group controlId="description" className='d-flex flex-column'>
+        <Form.Label>Descripció:</Form.Label>
+        <Form.Control as="textarea" {...register('description', { required: 'Aquest camp és obligatori' })} />
+        {errors.description && <p className="text-danger">{errors.description.message}</p>}
+      </Form.Group>
 
-    <label className='d-flex flex-column'>
-      Imatge:
-      <input type="text" name="upload" value={formData.upload} onChange={handleInputChange} />
-    </label>
-    
-    <div className='row'>
-      <label className='d-flex flex-column col-md-6'>
-        Latitud:
-        <input type="text" name="latitude" value={formData.latitude} onChange={handleInputChange} />
-      </label>
-      <label className='d-flex flex-column col-md-6'>
-        Longitud:
-        <input type="text" name="longitude" value={formData.longitude} onChange={handleInputChange} />
-      </label>
-    </div>
+      <Form.Group controlId="upload" className='d-flex flex-column'>
+        <Form.Label>Imatge:</Form.Label>
+        <Form.Control type="text" {...register('upload', { required: 'Aquest camp és obligatori' })} />
+        {errors.upload && <p className="text-danger">{errors.upload.message}</p>}
+      </Form.Group>
 
-    <div className='d-flex flex-column py-3'>
-      Visibilitat:
-      <label>
-        <input
+      <div className='row'>
+        <Form.Group controlId="latitude" className='d-flex flex-column col-md-6'>
+          <Form.Label>Latitud:</Form.Label>
+          <Form.Control type="text" {...register('latitude', { required: 'Aquest camp és obligatori' })} />
+          {errors.latitude && <p className="text-danger">{errors.latitude.message}</p>}
+        </Form.Group>
+
+        <Form.Group controlId="longitude" className='d-flex flex-column col-md-6'>
+          <Form.Label>Longitud:</Form.Label>
+          <Form.Control type="text" {...register('longitude', { required: 'Aquest camp és obligatori' })} />
+          {errors.longitude && <p className="text-danger">{errors.longitude.message}</p>}
+        </Form.Group>
+      </div>
+
+      <div className='d-flex flex-column py-3'>
+        <Form.Label>Visibilitat:</Form.Label>
+
+        <Form.Check
           type="radio"
-          name="visibility"
+          label="Public"
+          {...register('visibility', { required: 'Aquest camp és obligatori' })}
           value="public"
-          checked={formData.visibility === 'public'}
-          onChange={handleInputChange}
         />
-        Public
-      </label>
-      <label>
-        <input
+
+        <Form.Check
           type="radio"
-          name="visibility"
+          label="Contactes"
+          {...register('visibility', { required: 'Aquest camp és obligatori' })}
           value="contacts"
-          checked={formData.visibility === 'contacts'}
-          onChange={handleInputChange}
         />
-        Contactes
-      </label>
-      <label>
-        <input
+
+        <Form.Check
           type="radio"
-          name="visibility"
+          label="Privat"
+          {...register('visibility', { required: 'Aquest camp és obligatori' })}
           value="private"
-          checked={formData.visibility === 'private'}
-          onChange={handleInputChange}
         />
-        Privat
-      </label>
-    </div>
 
-    <label htmlFor="author"> 
-      <input type="hidden" name="id" value={formData.author.name}/>
-    </label>
+        {errors.visibility && <p className="text-danger">{errors.visibility.message}</p>}
+      </div>
 
-    <Button type="submit" variant='outline-primary'> Crear nou post </Button>
-  </form>
-  )
-}
+      <Form.Group controlId="author">
+        <Form.Control type="hidden" {...register('id')} />
+      </Form.Group>
 
-export default PostAdd
+      <Button type="submit" variant='outline-primary'> Crear nou post </Button>
+    </Form>
+  );
+};
+
+export default PostAdd;
