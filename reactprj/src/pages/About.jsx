@@ -55,26 +55,28 @@ export default function App() {
     } 
   }
   
-
-
-  useEffect(() => {
-    getLocation();
-
- },[])
-
 //Listener i lògica del modal de coordenades
 const [show, setShow] = useState(false);
 
 const handleClose = () => setShow(false);
 const handleShow = () => setShow(true);
-listener.simple_combo("ctrl alt g",function(){
-  handleShow()
-})
 
-//Listener i lògica de centrar el mapa
-  listener.simple_combo("ctrl alt c", function(){
-    setMap({ ...map, center: centerCoord })
-  })
+  useEffect(() => {
+    getLocation();
+
+    listener.simple_combo("ctrl alt g",function(){
+      handleShow()
+    })
+    
+    //Listener i lògica de centrar el mapa
+      listener.simple_combo("ctrl alt c", function(){
+        setMap({ ...map, center: centerCoord })
+      })
+
+ },[])
+
+
+
     
   return (
     <>

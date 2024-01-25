@@ -45,6 +45,7 @@ export default function Post() {
     setIsLoading(false)
     
     {post.favorites.filter((fav)=>fav.user === authToken)? setIsFav(true) : (null)}
+
   },[isLoading])
   
 
@@ -120,13 +121,17 @@ export default function Post() {
                       </div>
                       <p>{post.author.name}</p>
                       
-                      <div onClick={()=>handleFavs()}>
+                      <div className='d-flex flex-row' onClick={()=>handleFavs()}>
                         {isFav ?
+                        <>
                         <img className='col-2' src="https://www.freeiconspng.com/thumbs/heart-icon/valentine-heart-icon-6.png"
-                             alt="Liked" />
+                             alt="Liked" /> <h3 className='col-1 px-2'> {post.favorites.length - 1}</h3>
+                        </>
                         :
+                        <>
                         <img className='col-2' src="https://cdn-icons-png.freepik.com/256/1077/1077035.png" 
-                            alt="Liked" />
+                            alt="Not Liked" /> <h3 className='col-1 px-2'> {post.favorites.length - 1}</h3>
+                        </>
                         }
                       </div>
                       
