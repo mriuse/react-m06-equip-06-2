@@ -1,72 +1,53 @@
-import React, {useState, useContext, useEffect} from 'react'
-import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid'
+import React, { useContext } from 'react';
+import { useForm } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from '../../../userContext';
-import { Col, Button } from 'react-bootstrap'
+import { Col, Button } from 'react-bootstrap';
 
-const ReviewAdd = ({place_id, handleReviewAdded}) => {
-  const navigate = useNavigate()
-  const {authToken, setAuthToken} = useContext(UserContext)
+const ReviewAdd = ({ place_id, handleReviewAdded }) => {
+  const { authToken, setAuthToken } = useContext(UserContext);
   let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
-  const user = users.find(user => user.name === authToken);
+  const user = users.find((user) => user.name === authToken);
 
   const currentDate = new Date();
 
-  const [formData, setFormData] = useState({
-    id: uuidv4(), 
-    id_ref: place_id,
-    review: '',
-    created_at: currentDate,
-    user: {
-      name: user.name,
-      email: user.email,  
-    }
-  })
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();    
-
+  const onSubmit = (data) => {
     let reviewList = localStorage.getItem('reviews') ? JSON.parse(localStorage.getItem('reviews')) : [];
 
-    let newReview = formData;
-    reviewList.push(newReview); 
-    
-    localStorage.setItem("reviews", JSON.stringify(reviewList));
-
-    setFormData({
-      ...formData,
-      id: uuidv4(), 
+    let newReview = {
+      id: uuidv4(),
       id_ref: place_id,
-      review: '',
+      review: data.review,
       created_at: currentDate,
       user: {
-        name: authToken,
-        email: '', 
-      }
-    })
+        name: user.name,
+        email: user.email,
+      },
+    };
 
-    handleReviewAdded()
-  }
+    reviewList.push(newReview);
+    localStorage.setItem('reviews', JSON.stringify(reviewList));
+
+    setValue('review', '');
+
+    handleReviewAdded();
+  };
 
   return (
     <Col className='mb-4'>
-      <form onSubmit={handleSubmit} className='d-flex flex-column justify-content-between'>
+      <form onSubmit={handleSubmit(onSubmit)} className='d-flex flex-column justify-content-between'>
         <label className='d-flex flex-column pb-3'>
-          <textarea name="review" onChange={handleInputChange} value={formData.review} />
+          <textarea {...register('review', { required: 'Aquest camp és obligatori' })} />
+          {errors.review && <p className="text-danger">{errors.review.message}</p>}
         </label>
-        <Button type="submit" variant='primary'>Afegir ressenya</Button>
+        <Button type='submit' variant='primary'>
+          Afegir ressenya
+        </Button>
       </form>
     </Col>
-    
-  )
-}
+  );
+};
 
 export default ReviewAdd;

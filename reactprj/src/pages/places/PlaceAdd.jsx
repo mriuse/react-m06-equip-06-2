@@ -1,107 +1,41 @@
-import { useState, useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from "../../userContext";
+import { useForm } from "react-hook-form";
 
 const PlaceAdd = () => {
-
   const navigate = useNavigate();
+  const { authToken } = useContext(UserContext);
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-  let { authToken, setAuthToken } = useContext(UserContext);
-
-  let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
-  const user = users.find(user => user.name === authToken);
-
-  let placeDate =  new Date();
-  let placeDateStr = placeDate.toDateString();
-
-  const [data, setData] = useState({
-    id: uuidv4(),
-    name: '',
-    description: '',
-    image: '',
-    longitude: '',
-    latitude: '',
-    date: '',
-    author: {
-      name: '',
-      email: ''
-    },
-    visibility: 'public'
-  });
-
-  let [error, setError] = useState();
-
-  useEffect( ()=> {
-    navigator.geolocation.getCurrentPosition( (pos) => {
-      setData({
-        ...data,
-        latitude :  pos.coords.latitude,
-        longitude: pos.coords.longitude,
-      });
-      console.log("Latitude is :", pos.coords.latitude);
-      console.log("Longitude is :", pos.coords.longitude);
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setValue("latitude", pos.coords.latitude);
+      setValue("longitude", pos.coords.longitude);
     });
-   },[]);
+  }, [setValue]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const onSubmit = (data) => {
+    let places = localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : [];
+    let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
+    const user = users.find(user => user.name === authToken);
 
-    setData({
+    const newPlace = {
       ...data,
-      [name]: value,
-    });
-  };
+      id: uuidv4(),
+      date: new Date().toDateString(),
+      author: {
+        name: user.name,
+        email: user.email
+      },
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    try {
-      if (data.name === "" || data.description === "" || data.image === "") {
-        throw new Error("Error: No s'accepten camps buits al formulari.");
-      }
-      if (data.latitude > 90 || data.latitude < -90){
-        throw new Error("Error: Latitud invàlida.");
-      }
-      if (data.longitude > 180 || data.longitude < -180){
-        throw new Error("Error: Longitud invàlida.");
-      }
+    places.push(newPlace);
+    localStorage.setItem('places', JSON.stringify(places));
 
-      let places = localStorage.getItem('places') ? JSON.parse(localStorage.getItem('places')) : [];
-
-      const newPlace = {
-        ...data,
-        id: uuidv4(),
-        date: placeDateStr,
-        author: {
-          name: user.name,
-          email: user.email
-        },
-      };
-
-      places.push(newPlace);
-      localStorage.setItem('places', JSON.stringify(places));
-
-      setData({
-        id: '',
-        name: '',
-        description: '',
-        image: '',
-        longitude: '',
-        latitude: '',
-        date: '',
-        author: {
-          name: '',
-          email: ''
-        },
-        visibility: 'public'
-      });
-
-      navigate(-1);
-
-    } catch (error) {
-      setError(error.message);
-    }
+    navigate(-1);
   };
 
   return (
@@ -112,39 +46,65 @@ const PlaceAdd = () => {
             <h1 className='mb-4'>Afegir lloc nou</h1>
           </Col>
         </Row>
-        {error && (
-          <Row>
-            <Col>
-              <p className="text-danger">{error}</p>
-            </Col>
-          </Row>
-        )}
         <Row>
           <Col>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group className='mb-3' controlId="name">
                 <Form.Label>Nom</Form.Label>
-                <Form.Control type="text" name="name" value={data.name} onChange={handleInputChange} />
+                <Form.Control type="text" {...register("name", { required: true })} />
+                {errors.name && <p className="text-danger">Aquest camp és obligatori</p>}
               </Form.Group>
               <Form.Group className='mb-2' controlId="description">
                 <Form.Label>Descripció</Form.Label>
-                <Form.Control as="textarea" rows={3} name="description" value={data.description} onChange={handleInputChange} />
+                <Form.Control as="textarea" rows={3} {...register("description", { required: true })} />
+                {errors.description && <p className="text-danger">Aquest camp és obligatori</p>}
               </Form.Group>
               <Form.Group className='mb-3' controlId="image">
                 <Form.Label>URL Imatge</Form.Label>
-                <Form.Control type="text" name="image" value={data.image} onChange={handleInputChange} />
+                <Form.Control type="text" {...register("image", {
+                  required: true,
+                  pattern: /^(https?):\/\/[^\s$.?#].[^\s]*$/i,
+                })} />
+                {errors.image && <p className="text-danger">Introdueix una URL vàlida</p>}
               </Form.Group>
-              <Form.Group className='mb-2' controlId="longitude">
+              <Form.Group className='mb-3' controlId="longitude">
                 <Form.Label>Longitud</Form.Label>
-                <Form.Control type="number" placeholder="0.000001" step="0.000001" name="longitude" value={data.longitude} onChange={handleInputChange} />
+                <Form.Control
+                  type="number"
+                  placeholder="0.0000001"
+                  step="0.0000001"
+                  {...register("longitude", {
+                    required: true,
+                    validate: value => {
+                      return value <= 180 && value >= -180 || 'Longitud invàlida';
+                    }
+                  })}
+                />
+                {errors.longitude && <p className="text-danger">{errors.longitude.message}</p>}
               </Form.Group>
-              <Form.Group className='mb-2' controlId="latitude">
+              <Form.Group className='mb-3' controlId="latitude">
                 <Form.Label>Latitud</Form.Label>
-                <Form.Control type="number" placeholder="0.000001" step="0.000001" name="latitude" value={data.latitude} onChange={handleInputChange} />
+                <Form.Control
+                  type="number"
+                  placeholder="0.0000001"
+                  step="0.0000001"
+                  {...register("latitude", {
+                    required: true,
+                    validate: value => {
+                      return value <= 90 && value >= -90 || 'Latitud invàlida';
+                    }
+                  })}
+                />
+                {errors.latitude && <p className="text-danger">{errors.latitude.message}</p>}
               </Form.Group>
               <Form.Group className='mb-4' controlId="visibility">
                 <Form.Label>Visibilitat</Form.Label>
-                <Form.Control as="select" name="visibility" value={data.visibility} onChange={handleInputChange}>
+                <Form.Control
+                  as="select"
+                  {...register('visibility', {
+                    required: 'Aquest camp és obligatori'
+                  })}
+                >
                   <option value="public">Public</option>
                   <option value="contacts">Contactes</option>
                   <option value="private">Privada</option>
