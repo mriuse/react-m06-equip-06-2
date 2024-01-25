@@ -75,20 +75,43 @@ const PostAdd = () => {
 
       <Form.Group controlId="upload" className='d-flex flex-column'>
         <Form.Label>Imatge:</Form.Label>
-        <Form.Control type="text" {...register('upload', { required: 'Aquest camp és obligatori' })} />
+        <Form.Control type="text" {...register("upload", {
+          required: true,
+          pattern: /^(https?):\/\/[^\s$.?#].[^\s]*$/i,
+        })} />
         {errors.upload && <p className="text-danger">{errors.upload.message}</p>}
       </Form.Group>
 
       <div className='row'>
         <Form.Group controlId="latitude" className='d-flex flex-column col-md-6'>
           <Form.Label>Latitud:</Form.Label>
-          <Form.Control type="text" {...register('latitude', { required: 'Aquest camp és obligatori' })} />
+          <Form.Control
+            type="number"
+            placeholder="0.0000001"
+            step="0.0000001"
+            {...register("latitude", {
+              required: true,
+              validate: value => {
+                return value <= 90 && value >= -90 || 'Latitud invàlida';
+              }
+            })}
+          />
           {errors.latitude && <p className="text-danger">{errors.latitude.message}</p>}
         </Form.Group>
 
         <Form.Group controlId="longitude" className='d-flex flex-column col-md-6'>
           <Form.Label>Longitud:</Form.Label>
-          <Form.Control type="text" {...register('longitude', { required: 'Aquest camp és obligatori' })} />
+          <Form.Control
+            type="number"
+            placeholder="0.0000001"
+            step="0.0000001"
+            {...register("longitude", {
+              required: true,
+              validate: value => {
+                return value <= 180 && value >= -180 || 'Longitud invàlida';
+              }
+            })}
+          />
           {errors.longitude && <p className="text-danger">{errors.longitude.message}</p>}
         </Form.Group>
       </div>
