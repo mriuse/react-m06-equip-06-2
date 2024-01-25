@@ -1,12 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import ListGroup from 'react-bootstrap/ListGroup';
-import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
-import { CardTitle, Row, Col, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 const Comment = ({id,item,user, onCommentDeleted}) => {
-  const navigate = useNavigate();
   let now = new Date()
   let temps
   let unitats

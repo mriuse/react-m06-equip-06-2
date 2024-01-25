@@ -95,7 +95,7 @@ export default function Post() {
       let someFavs = [...post.favorites, newFav]
       setPost({
         ...post,
-        favorites: {someFavs}
+        favorites: someFavs
       })
 
       setIsFav(true)
@@ -105,11 +105,11 @@ export default function Post() {
   return (
     <>
     <CommentContext.Provider value={{Comments, setComments }}>
-          <Card className="d-md-flex flex-column mt-2 col-8 offset-2">
+          <Card className="d-md-flex flex-column mt-2 col-md-8 offset-md-2 col-10 offset-1">
           <Card.Title className="ps-4 pt-3 bg-primary-dark border rounded-top"> <h2><b>{post.name}</b></h2> </Card.Title>
           {isLoading ? (
           <div> ...carregant </div>
-          ): <div className='d-flex flex-row'>
+          ): <div className='d-md-flex flex-md-row'>
               <Card.Body className='px-2 col-md-5 '>
               <Card.Img variant="top" src={post.upload}></Card.Img>
                   <ListGroup variant="flush">
@@ -120,11 +120,13 @@ export default function Post() {
                       </div>
                       <p>{post.author.name}</p>
                       
-                      <div className='row' onClick={()=>handleFavs()}>
+                      <div onClick={()=>handleFavs()}>
                         {isFav ?
-                        <p>Liked</p>
+                        <img className='col-2' src="https://www.freeiconspng.com/thumbs/heart-icon/valentine-heart-icon-6.png"
+                             alt="Liked" />
                         :
-                        <p>Not liked</p>
+                        <img className='col-2' src="https://cdn-icons-png.freepik.com/256/1077/1077035.png" 
+                            alt="Liked" />
                         }
                       </div>
                       

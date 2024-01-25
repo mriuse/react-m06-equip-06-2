@@ -1,5 +1,5 @@
-import { Container, Row, Col, Button, ModalDialog, ModalHeader, ModalBody} from 'react-bootstrap';
-import React, { useState, useContext, useEffect} from 'react'
+import { Container, Row, Col, Button, ModalHeader, ModalBody} from 'react-bootstrap';
+import React, { useState, useEffect} from 'react'
 import { RiTwitterLine, RiFacebookCircleLine, RiGithubLine, RiLinkedinLine } from "react-icons/ri";
 
 import Card from 'react-bootstrap/Card';
@@ -59,7 +59,7 @@ export default function App() {
 
   useEffect(() => {
     getLocation();
-    console.log(latitude, longitude)
+
  },[])
 
 //Listener i lògica del modal de coordenades
@@ -72,7 +72,6 @@ listener.simple_combo("ctrl alt g",function(){
 })
 
 //Listener i lògica de centrar el mapa
-const handleMapRefresh = () => setMapRefresh(true)
   listener.simple_combo("ctrl alt c", function(){
     setMap({ ...map, center: centerCoord })
   })
