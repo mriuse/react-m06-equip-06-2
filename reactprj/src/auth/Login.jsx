@@ -1,82 +1,97 @@
 import { useState, useContext } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { UserContext } from '../userContext';
+import { useForm } from "react-hook-form";
 
 const Login = ({ toggleLogin }) => {
-  let [name, setName] = useState("");
-  let [password, setPassword] = useState("");
-  let [error, setError] = useState({});
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  let { authToken, setAuthToken } = useContext(UserContext);
+  const { setAuthToken } = useContext(UserContext);
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+  const users = JSON.parse(localStorage.getItem("users")) || [];
 
-  let sendLogin = (e) => {
-    e.preventDefault();
+  const sendLogin = (data) => {
     const checkUser = users.some(
-      user => user.name === name && user.password === password
+      user => user.name === data.name && user.password === data.password
     );
 
     if(checkUser){
-      setAuthToken(name);
-      console.log("User login: " + name)
-      localStorage.setItem ("authToken",JSON.stringify(name));
+      setAuthToken(data.name);
+      console.log("User login: " + data.name);
+      localStorage.setItem ("authToken",JSON.stringify(data.name));
     }else{
       setError({ message: "Invalid login credentials!" });
     }
-    
-  }
+  };
 
   return (
     <>
       <Row className="border border-primary border-2 p-3 rounded">
         <Col lg={6} md={8} sm={10} xs={12} className="container-md">
-          <Form action="login">
+          <Form onSubmit={handleSubmit(sendLogin)}>
             <Form.Group className="mb-3" controlId="name">
               <Form.Label>Nom d'usuari:</Form.Label>
-              <Form.Control
-              name="name" 
-              type="text"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
+              <Form.Control 
+                type="text"
+                {...register("name", {
+                  required: "Aquest camp és obligatori",
+                  minLength: {
+                    value: 3,
+                    message: "El nom ha de tenir almenys 3 caràcters",
+                  },
+                  pattern: {
+                    value: /^[a-zA-ZÀ-ÿ']+\s[a-zA-ZÀ-ÿ']+$/,
+                    message: "Introdueix un nom i cognom vàlids",
+                  },
+                })}
+              />
+              {errors.name && (
+                <p className="text-danger">{errors.name.message}</p>
+              )}
             </Form.Group>
             <Form.Group className="mb-3" controlId="password">
-              <Form.Label>Password:</Form.Label>
+              <Form.Label>Contrasenya:</Form.Label>
               <Form.Control 
-              name="password"
-              type="password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
+                type="password"
+                {...register("password", {
+                  required: "Aquest camp és obligatori",
+                  minLength: {
+                    value: 8,
+                    message: "La contrasenya ha de tenir almenys 8 caràcters",
+                  },
+                  pattern: {
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+                    message:
+                      "La contrasenya ha de contenir almenys una majúscula, una minúscula, un número i un caràcter especial",
+                  },
+                })}
+              />
+              {errors.password && (
+                <p className="text-danger">{errors.password.message}</p>
+              )}
             </Form.Group>
-            {error && error.message && (
+            {errors && errors.message && (
               <div className="mb-3">
-                <p className="text-danger">{error.message}</p>
+                <p className="text-danger">{errors.message}</p>
               </div>
             )}
             <div className="mb-3">
-              <Button 
-                variant="primary"
-                onClick={(e) => {
-                  sendLogin(e);
-                }}
-              >Login</Button>
+              <Button variant="primary" type="submit">
+                Entrar
+              </Button>
             </div>
           </Form>
         </Col>
       </Row>
       <Row className="mt-3">
         <Col>
-          <Button
+          <Button 
             className='btn btn-primary'
             onClick={() => {
               toggleLogin(false);
             }}
           >
-            Not registered? Register here
+            No tens compte? Registra't
           </Button>
         </Col>
       </Row>
