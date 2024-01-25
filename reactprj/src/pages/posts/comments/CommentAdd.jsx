@@ -1,15 +1,11 @@
 import React, {useState, useContext, useEffect} from 'react'
-import { useNavigate } from 'react-router-dom';
 
 import { v4 as uuidv4 } from 'uuid'
 import { UserContext } from '../../../userContext';
-import { CommentContext } from './commentContext';
 import { Button } from 'react-bootstrap'
 
 const CommentAdd = ({post_id, onCommentAdded}) => {
-  const navigate = useNavigate()
   const {authToken, setAuthToken} = useContext(UserContext)
-  const {comments, setComments} = useContext(CommentContext)
   const currentDate = new Date()
   const [formData, setFormData] = useState({
     id: uuidv4(), 

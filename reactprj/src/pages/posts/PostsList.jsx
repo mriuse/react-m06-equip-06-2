@@ -14,6 +14,16 @@ const PostsList = () => {
       setPosts(postsGuardats)
   })
 
+  const deletePostComments = (id) => {
+    let comentarisGuardats = [];
+    // Trec l'array de comments de localstorage
+    const comentarisGuardatsJSON = localStorage.getItem('comments')
+    comentarisGuardats = comentarisGuardatsJSON ? JSON.parse(comentarisGuardatsJSON) : []
+    // Filtro els comments que no són del post esborrat
+    comentarisGuardats = comentarisGuardats.filter(comment => comment.id_post !== id)
+    // Torno a guardar l'array a localstorage
+    localStorage.setItem('comments', JSON.stringify(comentarisGuardats))
+  }
   const deletePost = (id) => {
     let postsGuardats = [];
     // Trec l'array de posts de localstorage
@@ -25,8 +35,10 @@ const PostsList = () => {
     postsGuardats.splice(postKey, 1)
     // Torno a guardar l'array a localstorage
     localStorage.setItem('posts', JSON.stringify(postsGuardats))
+    //Esborro els comentaris del post
+    deletePostComments(id)
     // Actualitzo l'array de posts de la pagina
-    setPostList(postsGuardats)
+    setPosts(postsGuardats)
   }
 
 
