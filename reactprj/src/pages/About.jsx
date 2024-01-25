@@ -12,13 +12,18 @@ import { Point } from "ol/geom";
 import "ol/ol.css";
 
 export default function App() {
-  var [mapRefresh, setMapRefresh] = useState(false)
-  const [map, setMap] = useState({
-    center : fromLonLat([1.72833, 41.23112]),
+
+  const centerCoord = fromLonLat([1.72833, 41.23112])
+
+  const initial = {
+    center : centerCoord,
     zoom : 18
-  })
+  }
+
+  const [map, setMap] = useState(initial)
   
-  const [point, setPoint] = useState();
+  const [pointCenter, setPointCenter] = useState(new Point(centerCoord))
+  const [pointUser, setPointUser] = useState();
   
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
@@ -41,7 +46,7 @@ export default function App() {
   function coordenades(position){
     setLatitude(position.coords.latitude)
     setLongitude(position.coords.longitude)
-    setPoint(new Point(fromLonLat([position.coords.longitude,position.coords.latitude])))
+    setPointUser(new Point(fromLonLat([position.coords.longitude,position.coords.latitude])))
   } 
 
   function getLocation() {
@@ -50,6 +55,8 @@ export default function App() {
     } 
   }
   
+
+
   useEffect(() => {
     getLocation();
     console.log(latitude, longitude)
@@ -65,8 +72,9 @@ listener.simple_combo("ctrl alt g",function(){
 })
 
 //Listener i lògica de centrar el mapa
+const handleMapRefresh = () => setMapRefresh(true)
   listener.simple_combo("ctrl alt c", function(){
-      setMapRefresh(false)
+    setMap({ ...map, center: centerCoord })
   })
     
   return (
@@ -102,17 +110,16 @@ listener.simple_combo("ctrl alt g",function(){
             <Col className="d-flex flex-column align-items-center">
               <h1 className='mb-0'>Vols visitar-nos?</h1>
               <p className='mb-5'>Ubica'ns al mapa</p>
-              {!mapRefresh ? setMapRefresh(true) : 
-                <RMap width={"100%"} height={"70vh"} initial={map}>
+                <RMap width={"100%"} height={"70vh"} initial={initial} view={[map,setMap]}>
                   <ROSM />
                   <RLayerVector zIndex={10}>
-                    <RFeature geometry={new Point(map.center)}>
+                    <RFeature geometry={pointCenter}>
                       <RStyle>
                         <RIcon src={locationIcon} anchor={[0.5, 0.9]} />
                       </RStyle>
                     </RFeature>
-                    {!point ? (null) : 
-                    <RFeature geometry={point}>
+                    {!pointUser ? (null) : 
+                    <RFeature geometry={pointUser}>
                       <RStyle>
                         <RIcon src={locationIcon} anchor={[0.5, 0.9]} />
                       </RStyle>
@@ -127,7 +134,6 @@ listener.simple_combo("ctrl alt g",function(){
                     } 
                   </RLayerVector>
                 </RMap>
-              }
             </Col>
         </Container>
       </div>
