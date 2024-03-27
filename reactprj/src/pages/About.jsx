@@ -28,8 +28,6 @@ export default function App() {
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
 
-  var listener = new window.keypress.Listener();
-
   const locationIcon = "https://static.vecteezy.com/system/resources/thumbnails/010/150/282/small/pin-location-icon-sign-symbol-design-free-png.png"
   
   // Es pot fer un watchPosition sense totes les opcions, realment l'unica necessària és la callback, però és molt imprecís i m'enviava a Màlaga.
@@ -55,7 +53,7 @@ export default function App() {
     } 
   }
   
-//Listener i lògica del modal de coordenades
+  
 const [show, setShow] = useState(false);
 
 const handleClose = () => setShow(false);
@@ -63,16 +61,6 @@ const handleShow = () => setShow(true);
 
   useEffect(() => {
     getLocation();
-
-    listener.simple_combo("ctrl alt g",function(){
-      handleShow()
-    })
-    
-    //Listener i lògica de centrar el mapa
-      listener.simple_combo("ctrl alt c", function(){
-        setMap({ ...map, center: centerCoord })
-      })
-
  },[])
 
 
