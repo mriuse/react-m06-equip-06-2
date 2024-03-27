@@ -41,7 +41,6 @@ const PostsList = () => {
     setPosts(postsGuardats)
   }
 
-
   return (
         <div>
           <PostsMenu/>
