@@ -12,11 +12,11 @@ const ReviewList = ({ id, updateReviewCount }) => {
   let [hasReviewed, setHasReviewed] = useState(false);
   let [postReviews, setPostReviews] = useState([]);
 
-  useEffect(() => {
-    let filteredReviews = reviews.filter((review) => review.id_ref === id) || null;
-    setPostReviews(filteredReviews);
-    setHasReviewed(filteredReviews.find((review) => review.user.name === authToken));
-  }, [id, reviews, authToken]);
+  // useEffect(() => {
+  //   let filteredReviews = reviews.filter((review) => review.id_ref === id) || null;
+  //   setPostReviews(filteredReviews);
+  //   setHasReviewed(filteredReviews.find((review) => review.user.name === authToken));
+  // }, [id, reviews, authToken]);
 
   const handleReviewAdded = () => {
     reviews = localStorage.getItem('reviews') ? JSON.parse(localStorage.getItem('reviews')) : [];
