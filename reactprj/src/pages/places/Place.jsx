@@ -1,4 +1,4 @@
-import { Container, Row, Col, Button, InputGroup} from 'react-bootstrap';
+import { Container, Row, Col, Button, InputGroup } from 'react-bootstrap';
 import InputGroupText from 'react-bootstrap/esm/InputGroupText';
 import { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -6,12 +6,14 @@ import { UserContext } from "../../userContext";
 import { ReviewContext } from './reviews/reviewContext';
 import ReviewList from './reviews/ReviewList';
 import { v4 as uuidv4 } from 'uuid'
+import { useSpeechSynthesis } from 'react-speech-kit';
 
 const Place = () => {
   let { authToken, setAuthToken } = useContext(UserContext);
 
   const { id } = useParams();
-  
+  const { speak } = useSpeechSynthesis();
+
   const [place, setPlace] = useState(null);
   const [reviewCount, setReviewCount] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
@@ -75,11 +77,11 @@ const Place = () => {
   const toggleFavorite = () => {
     try {
       let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  
+
       const isAlreadyFavorited = favorites.some(
         favorite => favorite.id_ref === id && favorite.user.name === user.name
       );
-  
+
       if (isAlreadyFavorited) {
         favorites = favorites.filter(
           favorite => !(favorite.id_ref === id && favorite.user.name === user.name)
@@ -102,12 +104,11 @@ const Place = () => {
       console.error('Error updating favorites:', error);
     }
   };
-  
 
   const deleteSelf = (id) => {
-    try{
+    try {
       const places = JSON.parse(localStorage.getItem('places')) || [];
-      if (places.length === 0){
+      if (places.length === 0) {
         throw new Error("Error: No s'ha trobat el lloc a eliminar.");
       }
       const newPlaces = places.filter((place) => place.id !== id);
@@ -118,31 +119,57 @@ const Place = () => {
     }
   }
 
+  document.addEventListener('keydown', (event) => {
+    if (event.ctrlKey && event.altKey && event.key === 's') {
+      const authStatus = authToken ? "Estàs autenticat" : "No estàs autenticat";
+      const username = authToken ? user.name : "Anonymous";
+      speak({ text: `${authStatus}. El teu nom d'usuari és: ${username}.` });
+    }
+  });
+
+  function getAllText(element) {
+    let textContent = '';
+    function traverse(element) {
+      if (element.nodeType === Node.TEXT_NODE) {
+        textContent += element.textContent.trim() + ', ';
+      } else if (element.nodeType === Node.ELEMENT_NODE) {
+        for (let child of element.childNodes) {
+          traverse(child);
+        }
+      }
+    }
+    traverse(element);
+    return textContent.trim();
+  }
+
   return (
     <>
       <div className="section-light">
         <Container className="d-flex flex-column">
           <Row className='mb-3'>
-            <h1>{place.name}</h1>
+            <h1 onDoubleClick={(event) => speak({ text: event.target.textContent })}>{place.name}</h1>
           </Row>
           <Row className='d-flex flex-column mx-auto mb-4'>
-            <Col className='img-container-lg mb-4'>
+            <Col className='img-container-lg mb-4' onDoubleClick={() => {
+              const textContent = getAllText(document.body);
+              speak({ text: textContent });
+            }}>
               <img
                 src={place.image}
                 style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto' }}
               />
             </Col>
             <Col className='d-flex justify-content-between'>
-              <p className='mb-0'><b>Autor:</b> {place.author.name}</p>
-              <p><i>{place.date}</i></p>
+              <p className='mb-0' onDoubleClick={(event) => speak({ text: event.target.textContent })}><b>Autor:</b> {place.author.name}</p>
+              <p onDoubleClick={(event) => speak({ text: event.target.textContent })}><i>{place.date}</i></p>
             </Col>
             <Col className="d-flex justify-content-between">
-              <Button variant="primary" onClick={toggleFavorite}>
+              <Button variant="primary" onClick={toggleFavorite} onDoubleClick={(event) => speak({ text: "Botó de favorit" })}>
                 {isFavorited ? '-Favorit' : '+Favorit'}
               </Button>
               <InputGroup className='d-flex justify-content-end'>
-                <InputGroupText>{favoriteCount} favs</InputGroupText>
-                <InputGroupText>{reviewCount} ressenyes</InputGroupText>
+                <InputGroupText onDoubleClick={(event) => speak({ text: event.target.textContent })}>{favoriteCount} favs</InputGroupText>
+                <InputGroupText onDoubleClick={(event) => speak({ text: event.target.textContent })}>{reviewCount} ressenyes</InputGroupText>
               </InputGroup>
             </Col>
             <Col>
@@ -151,33 +178,33 @@ const Place = () => {
           </Row>
           <Row className='d-flex flex-column'>
             <Col>
-              <h5 className='mb-2'>Coordenades</h5>
-              <p><b>Latitud: </b>{place.latitude}<br></br><b>Longitud: </b>{place.longitude}</p>
-              <h5 className='mb-2'>Descripció</h5>
-              <p>{place.description}</p>
+              <h5 className='mb-2' onDoubleClick={(event) => speak({ text: event.target.textContent })}>Coordenades</h5>
+              <p onDoubleClick={(event) => speak({ text: event.target.textContent })}><b>Latitud: </b>{place.latitude}<br></br><b>Longitud: </b>{place.longitude}</p>
+              <h5 className='mb-2' onDoubleClick={(event) => speak({ text: event.target.textContent })}>Descripció</h5>
+              <p onDoubleClick={(event) => speak({ text: event.target.textContent })}>{place.description}</p>
             </Col>
             <Col className="my-4">
               <hr></hr>
             </Col>
             <Col >
-              <h5 className='mb-4'>Ressenyes</h5>
-              <ReviewList id={id} updateReviewCount={setReviewCount}/>
+              <h5 className='mb-4' onDoubleClick={(event) => speak({ text: event.target.textContent })}>Ressenyes</h5>
+              <ReviewList id={id} updateReviewCount={setReviewCount} />
             </Col>
             <Col className="my-4">
               <hr></hr>
             </Col>
             <Col className="d-flex flex-row justify-content-between">
               <Col>
-                { isAuthor && 
+                {isAuthor &&
                   (
                     <>
-                      <Button variant="secondary" onClick={()=>navigate("/places/"+id+"/edit")}>Editar</Button>
-                      <Button className="mx-1" variant="danger" onClick={()=>deleteSelf(id)}>Eliminar</Button>
+                      <Button variant="secondary" onClick={() => navigate("/places/" + id + "/edit")}>Editar</Button>
+                      <Button className="mx-1" variant="danger" onClick={() => deleteSelf(id)}>Eliminar</Button>
                     </>
                   )
                 }
               </Col>
-              <Button variant="primary" onClick={()=>navigate("/places/list")}>Tornar</Button>
+              <Button variant="primary" onClick={() => navigate("/places/list")}>Tornar</Button>
             </Col>
           </Row>
         </Container>

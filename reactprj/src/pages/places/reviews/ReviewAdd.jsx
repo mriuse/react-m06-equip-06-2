@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from '../../../userContext';
 import { Col, Button } from 'react-bootstrap';
+import { useSpeechSynthesis } from 'react-speech-kit';
 
 const ReviewAdd = ({ place_id, handleReviewAdded }) => {
   const { authToken, setAuthToken } = useContext(UserContext);
@@ -12,6 +13,8 @@ const ReviewAdd = ({ place_id, handleReviewAdded }) => {
   const currentDate = new Date();
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+
+  const { speak } = useSpeechSynthesis();
 
   const onSubmit = (data) => {
     let reviewList = localStorage.getItem('reviews') ? JSON.parse(localStorage.getItem('reviews')) : [];
@@ -39,7 +42,8 @@ const ReviewAdd = ({ place_id, handleReviewAdded }) => {
     <Col className='mb-4'>
       <form onSubmit={handleSubmit(onSubmit)} className='d-flex flex-column justify-content-between'>
         <label className='d-flex flex-column pb-3'>
-          <textarea {...register('review', { required: 'Aquest camp és obligatori' })} />
+          <textarea {...register('review', { required: 'Aquest camp és obligatori' })} 
+          onDoubleClick={(event) => speak({ text: event.target.value })}/>
           {errors.review && <p className="text-danger">{errors.review.message}</p>}
         </label>
         <Button type='submit' variant='primary'>
